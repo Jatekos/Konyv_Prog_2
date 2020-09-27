@@ -1,0 +1,338 @@
+<chapter xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xi="http://www.w3.org/2001/XInclude" version="5.0" xml:lang="hu">
+   
+        <title>Helló, Gutenberg!</title>
+       
+       
+         
+       
+   
+    <section>
+        <title>Programozási alapfogalmak</title>
+        <para>         
+            <citation>PICI</citation>       
+        </para>
+          <para>
+            Juhász István: Magas zintű programozási nyelvek (pici-könyv) 11-27. oldal 56-71:
+            </para>
+          <para> A számítógépek programozására kialakult nyelveknek három szintjét különböztetjük meg:</para>
+             <para>gépi nyelv :Minden  processzor  rendelkezik  saját  gépi  nyelvvel, és  csak  az  adott  gépi  nyelven  írt programokat   tudja   végrehajtani.</para> 
+             <para>assembly szintő nyelv </para> 
+             <para>magas szintő nyelv: Egy magas szintő programozási nyelvet szintaktikai és szemantikai szabályainak együttese határoz meg. </para> 
+         
+
+         <para>
+         A    fordítóprogram    egy    speciális    program,    amely    a    magas    szintő    nyelven    megírt forrásprogramból    gépi    kódú tárgyprogramot    állít    elő.  
+         </para>
+         <para> Feladatai:</para>
+         <para>lexikális elemzés,szintaktikai elemzés, szemantikai elemzés, kódgenerálás </para>
+          <para> A lexikális elemzés során a forrásszöveget feldarabolja lexikális egységekre (l. 2.2. alfejezet), a  szintaktikai  elemzés  folyamán  ellenırzi,  hogy  teljesülnek-e  az  adott  nyelv  szintaktikaiszabályai.</para>
+
+        <para>
+        A programnyelvek osztályozása:
+        </para>
+        <para>
+        Imperatív nyelvek (Algoritmikus  nyelvek)
+        </para> 
+          <para>
+        Deklaratív nyelvek (Nem algoritmikus nyelvek)
+        </para> 
+        <para>
+        Karakterkészlet
+        </para>
+        <para>
+        Minden   program   forrásszövegének  legkisebb  alkotórészei  a karakterek. Az  eljárásorientált nyelvek esetén ezek a következők:
+         </para>
+         <para>
+        lexikális egységek, szintaktikai egységek, utasítások, programegységek, fordítási egységek, program 
+         </para>
+         <para>
+        Minden   nyelv   definiálja   a   saját   karakterkészletét.
+       
+       </para>
+       <para>
+       Általában   a   karaktereket   a   következı   módon kategorizálják:
+       </para>
+       <para>
+       betők, számjegyek, egyéb karakterek 
+       </para>
+        <para>
+         Lexikális egységek
+       </para>
+       <para>
+       Lexikális egységek :
+       </para>
+        <para>
+         többkarakteres szimbólum, szimbolikus név, címke, megjegyzés, literál
+       </para>
+        
+        <para>
+        UTASÍTÁSOK:
+       </para>
+        <para>
+        Értékadó utasítás: Feladata  beállítani  vagy  módosítani  egy  (esetleg  több)  változó  értékkomponensét  a  program futásának bármely pillanatában.
+       </para>
+        <para>
+        Üres utasítás: Jelentısége  viszont  általánosságban  abban  áll,  hogy  segítségével  egyértelmőprogramszerkezet alakítható ki. 
+       </para>
+        <para>
+        Ugró utasítás: Az  ugró  (vagy  feltétel  nélküli  vezérlésátadó)  utasítás  segítségével  a  program  egy  adott pontjáról   egy   adott   címkével   ellátott   végrehajtható   utasításra   adhatjuk   át   a   vezérlést. 
+       </para>
+        <para>
+        Kétirányú elágaztató utasítás (feltételes utasítás): A kétirányú elágaztató utasítás arra szolgál, hogy a program egy adott pontján két tevékenység közül  válasszunk,  illetve  egy  adott  tevékenységet  végrehajtsunk  vagy  sem
+       </para>
+        <para>
+        Többirányú elágaztató utasítás: A  többirányú  elágaztató  utasítás  arra  szolgál,  hogy  a  program  egy  adott  pontján  egymást kölcsönösen kizáró akárhány tevékenység közül egyet végrehajtsunk.
+       </para>
+       <para>
+        Ciklusszervező utasítások: A  ciklusszervezı  utasítások  lehetıvé  teszik,  hogy  a  program  egy  adott  pontján  egy  bizonyos tevékenységet akárhányszor megismételjünk. 
+       </para>
+       <para>
+        Feltételes ciklus: Ennél  a  ciklusnál  az  ismétlıdést  egy  feltétel  igaz  vagy  hamis  értéke  szabályozza
+       </para>
+       <para>
+       Előírt lépésszámú ciklus: Minden  esetben  tartozik  hozzá  egy  változó,  a ciklusváltozó.  A  változó  által felvett  értékekre  fut  le  a  ciklusmag.  A  változó  az értékeit  egy  tartományból  veheti  föl.  Ezt  a tartományt  a  fejben  adjuk  meg kezdı-  és végértékével.
+        
+       </para>
+       <para>
+        Felsorolásos ciklus: A  felsorolásos  ciklus  az  elıírt  lépésszámú  ciklus  egyfajta  általánosításának  tekinthetı.  Van ciklusváltozója,  amely  explicit  módon  megadott  értékeket  vesz  fel,  és  minden  felvett  érték mellett  lefut  a  mag.
+       </para>
+       <para>
+        Végtelen ciklus:  A  végtelen  ciklus  az  a  ciklusfajta,  ahol  sem  a  fejben,  sem  a  végben  nincs  információ  az ismétlıdésre  vonatkozóan.  
+       </para>
+       <para>
+         Összetett ciklus: Az   elızı   négy   ciklusfajta   kombinációiból   áll   össze.
+       </para>
+       
+        
+        
+       
+        
+        
+    </section>        
+    <section>
+        <title>Programozás bevezetés</title>
+        <para>                
+            <citation>KERNIGHANRITCHIE</citation>
+        </para>
+        <para>Kernighan+Ritchie: C programozási nyelv:</para>
+          <para>1 fejezet:</para>
+
+          <para> printf</para>
+
+          <para>
+            %d       a számot decimális egészként írja ki;
+            %6d      a számot decimális egészként, legalább hat karakter széles mezőbe írja ki;
+            %f       a számot lebegőpontosként írja ki;
+            %6f      a számot lebegőpontosként, legalább 6 karakter széles mezőbe írja ki;
+            %.2f     a számot lebegőpontosként, két tizedessel írja ki;
+            %6.2f    a számot lebegőpontosként, legalább 6 karakter széles mezőbe, két tizedessel írja ki.
+
+            szimbolikus állandók
+            #define név helyettesítő szöveg
+          </para>
+          <para>
+            1.5. Karakteres adatok bevitele és kivitele
+            </para>
+          <para>
+            c = getchar( )
+            végrehajtása után a c változó a bemenő szöveg következő karakterét fogja tartalmazni.
+            A karakterek általában a terminálról (billentyűzetről) érkeznek, az adatállományból történő beolvasással a 7. fejezetben fogunk foglalkozni.
+            A putchar függvény minden egyes hívásakor kiír egy karaktert. A
+            putchar(c)
+            végrehajtása során a c egész típusú változó tartalma mint egy karakter íródik ki, általában a képernyőre.
+            A putchar és a printf hívások felváltva is történhetnek, ilyenkor a kimenet a hívások sorrendjében fog megjelenni.
+            </para>
+            <para>
+            A függvénydefiníció általános alakja:
+            visszatérési típus   függvénynév (paraméter-deklarációk, ha vannak)
+            {
+            deklarációk
+            utasítások
+            }
+          </para>
+          <para>
+              Változónevek:  A nevek betűkből és számjegyekből állhatnak és az első karakterüknek betűnek kell lenni. Az aláhúzás-karakter ( _ ) betűnek számít, és alkalmazásával sokszor javítható a hosszú változónevek olvashatósága.    
+          </para>
+          <para>
+          Deklarációk: 
+A felhasználása előtt minden változót deklarálni kell, bár bizonyos deklarációk implicit módon, a programkörnyezet alapján is létrejöhetnek. A deklaráció egy típust határoz meg, és utána egy vagy több adott típusú változó felsorolása (listája) áll. 
+          </para>
+          <para>
+          Vezérlési szerkezetek:
+
+Egy nyelv vezérlésátadó utasításai az egyes műveletek végrehajtási sorrendjét határozzák meg.
+          </para>
+          <para>
+          A C nyelvben a pontosvessző az utasításlezáró jel (terminátor), szemben a Pascal nyelvvel, ahol elválasztó szerepe van.
+
+A {} kapcsos zárójelekkel deklarációk és utasítások csoportját fogjuk össze egyetlen összetett utasításba vagy blokkba, ami szintaktikailag egyenértékű egyetlen utasítással.
+          </para>
+           <para>
+          Az if-else utasítást döntés kifejezésére használjuk.
+          </para>
+           <para>
+          A switch utasítás is a többirányú programelágaztatás egyik eszköze. Az utasítás úgy működik, hogy összehasonlítja egy kifejezés értékét több egész értékű állandó kifejezés értékével, és az ennek megfelelő utasítást hajtja végre.
+          </para>
+           <para>
+          A
+
+while (kifejezés)
+   utasítás
+
+szerkezetben a program először kiértékeli a kifejezést. Ha annak értéke nem nulla (igaz), akkor az utasítást végrehajtja, majd a kifejezés újra kiértékelődik. Ez a ciklus mindaddig folytatódik, amíg a kifejezés nullává (hamissá) nem válik, és ilyen esetben a program végrehajtása az utasítás utáni helyen folytatódik. 
+          </para>
+          <para>
+A függvényekkel a nagyobb számítási feladatok kisebb egységekre oszthatók, így a programozó felhasználhatja a már meglévő egységeket és nem kell minden alkalommal elölről kezdeni a munkát. A függvények a működésük részleteit gyakran elrejtik a program többi része elől, de jól megírt függvények esetén nincs is szükség ezekre a részletekre. 
+          </para>
+          <para>
+A külső változók: 
+A C nyelvű program külső objektumok – változók vagy függvények – halmaza. A külső jelzőt a belső ellentéteként használjuk, ami a függvények belsejében definiált argumentumok és változók leírására alkalmas. A külső változókat a függvényen kívül definiáljuk, így elvileg több függvényben is felhasználhatók.
+          </para>
+          
+        <para>
+            Megoldás videó: <link xlink:href="https://youtu.be/zmfT9miB-jY">https://youtu.be/zmfT9miB-jY</link>
+        </para>        
+    </section>        
+    <section>
+        <title>Programozás</title>
+        <para>                
+            <citation>BMECPP</citation>
+        </para>
+            <para>Benedek Zoltán, Levendovszky Tihamér: Szoftverfejlesztés C++ nyelven	6. oldalig + 487. oldal
+            </para>
+            <para>A c és c++ nyelv 
+            </para>
+            <para>Függvény paraméterek és visszatérési érték 
+            </para>
+            <para>üres paraméter listával való függvény hívás :
+            </para>
+            <para>c: tetszőleges számú paraméter
+            </para>
+            <para>c++: void típusú paraméterrel hívható
+            </para>
+            <para> c++ -ban a tetszőleges számu paraméterrel hívható fügvény:
+            </para>
+             <programlisting language="c"><![CDATA[void f(…)
+{
+//…
+}]]></programlisting>
+            <para>
+            Vissza térési érték c-ben alapértelmezeten int típusu c++ ban nem támogatott az alapértelmezett visszatérés, a fordító hibát dob. 
+            </para>
+            <para>A main fügvény két típusa:
+            </para>
+            <programlisting language="c"><![CDATA[int main ()
+{
+  
+  }]]></programlisting>
+            <programlisting language="c"><![CDATA[int main ( int argc, char *argv )
+{
+  
+  }]]></programlisting>
+  <para>
+  argc: parancssor-argumentumok száma
+  </para>
+  <para>
+argv: parancssori argumentumok
+  </para>
+  
+   <para>
+A bool típus
+  </para>
+  <para>
+c++ nyelvben meg jelenik a bool típus  értéke true vagy false át képezhető intre ahol a 0 jelenti a hamisat és minden más az igaz értéket.
+  </para>
+  <para>
+wchar_t beépített típussá vált használata meg egyezik a c-beli használattal
+  </para>
+  <para>
+Változódeklarálás mint utasítás c++ ban minden olyan helyen állhat változó deklaráció ahol utasítás állhat.  A ható körük kezdete a deklaráció helye a vége pedig az adott blokk vége ha if ben vagy for ban deklarálunk akkor az adott utasítás vége a ható kör vége
+  </para>
+  <para>
+Függvények túlterhelése  a c++ nyelvben nem a csak a függvény nevével hanem a nevével és a paraméter listával lesznek azonosítva a függvények.
+  </para>
+  <para>
+C++ ban a visza fele kompatibilitás miatt minden a c ben elő forduló utasítás használható
+az átállást segítő táblázatot lásd a könyv 487 oldalátol.
+  </para>
+        
+    </section>
+     <section>
+        <title>Mobil programozás</title>
+        <para>                
+            Ekler Péter, Forstner Bertalan, Kelényi Imre: Bevezetés ​a mobilprogramozásba	 35-49. oldal
+        </para>
+        
+         <para>                
+            Általános információk: A Python egy általános célú programozási nyelv. Guido van Rossum 1990-ben alkotta meg ezt a fejlesztők számára rengeteg pozitív tulajdonsággal rendel- kező nyelvet, amely magas szintű, dinamikus, objektumorientált és platform- független. 
+          A fejlesztés megkönnyítéséhez magas szintű típusokat is támogat, mint például különféle listák és szótárak.
+        </para>
+        <para>                
+            Előnyei miatt az interpretert elkészítették a Symbian mobil operációs rendszer S60 platformja alá is, hogy megkönnyítsék az egyszerűbb szoftver és prototípusfejlesztést mobil készülékekre. A Python S60 implementáció nagy- részt lefedi az alap Pythont, azonban egy-két modult kihagytak belőle, amely nem kapcsolódik szorosan a mobileszközökhöz.
+        </para>
+        <para>
+          A Python nyelv jellemzői
+Amikor alkalmazásokat fejlesztünk, sok esetben szükség van olyan részek
+megírására is, amelyek az adott probléma szempontjából nem relevánsak, el-
+készítésük mégis sok időt vesz igénybe. Ilyenek például a különféle fájlkezelő
+metódusok, hálózatkezelés, GUI kialakítása stb.
+A szokásos programírás/forditás/tesztelés/újrafordítás ciklust egy professzi-
+onális C, C++ vagy Java-fejlesztő is lassúnak találja egy idő után, márpedig er-
+re minden módosítás esetében szükség van. A Python ebben is segít, esetében
+ugyanis nincs szükség a fordítás fázisára, az értelmezőnek elegendő a Python-
+forr
+        </para>
+        <para>
+        A Python nyelv legfőbb jellemzője, hogy behúzásalapú a szintaxisa. A prog-
+ramban szereplő állításokat az azonos szintű behúzásokkal tudjuk csoportok-
+ba szervezni, nincs szükség kapcsos zárójelre vagy explicit kulcsszavakra (pl.
+begin, end). Egy adott blokk végét egy kisebb behúzású sor jelzi, tehát például
+üres sor lehet a blokkon belül. A szkript első utasítása nem lehet behúzott.
+Fontos, hogy a behúzásokat egységesen kezeljük, tehát vagy mindenhol tabot,
+vagy egységesen szóközt használjuk. Bizonyos szövegszerkesztőkben akár azt
+is beállíthatjuk, hogy a tab billentyű lenyomása 4 szóközt jelentsen.
+A nyelv további sajátossága, hogy a sor végéig tart egy utášítás, nincs
+szükség a megszokott ;' használatára.
+        </para>
+        <para>
+        Pythonban minden adatot objektumok reprezentálnak. Az adatokon végezhe-
+tő műveleteket az objektum típusa határozza meg. Pythonban nincs szükség
+a változók típusainak explicit megadására, a rendszer futási időben, automa-
+tikusan „kitalálja" a változók típusát a hozzárendelt érték alapján.
+Az adattípusok a következők lehetnek: számok, sztringek, ennesek (tuples,
+n-es), listák, szótárak (dictionaries).
+        </para>
+        <para>
+        Változók és alkalmazásuk
+Pythonban a változók alatt az egyes objektumokra mutató referenciákat ér-
+tünk. Maguknak a változóknak nincsenek típusai, így egy szkript futása so-
+rán bármely, akár különböző típusú objektumra is hivatkozhatnak. Ameny-
+nyiben egy objektumra az utolsó hivatkozást is töröljük (pl. a változói már
+más objektumokra mutatnak), az automatikus garbage collector szabadítja fel
+a memóriaterületet. A nem létező változókra való hivatkozás futás közbeni
+kivételt okoz.
+        </para>
+        <para>
+        Pythonban függvényeket a def kulcsszóval definiálhatunk. A függvényekre
+mint értékekre is tekinthetünk, hiszen azok továbbadhatók más függvények-
+nek, illetve objektumkonstruktoroknak is. A függvények rendelkeznek para-
+méterekkel, amelyeknek, a szokásos megkötésekkel és szintaxissal, alapér-
+telmezett értéket is adhatunk. A paraméterek érték szerint adódnak át, kivé-
+ve az úgynevezett mutable típusok (pl. listák, szótárak), amelyek függvénybe-
+li megváltoztatása hatással van a hívókódrészletben lévő objektumra is. Az
+egyes paramétereknek a szokásos szintaxissal (paraméter
+értelmezett értéket is adhatunk.
+        </para>
+      <para>
+      A Python nyelv támogatja a klasszikus, objektumorientált fejlesztési eljárá-
+sokat, amelyeket ebben az alfejezetben röviden átnézünk. Definiálhatunk
+osztályokat, amelyek példányai az objektumok. Az osztályoknak lehetnek att-
+ribútumaik: objektumok, illetve függvények. Ez utóbbiakat metódusoknak
+vagy tagfüggvénynek is hívjuk. Ezenkívül az osztályok örökölhetnek más osz-
+tályokból is.
+      </para>
+    </section>
+
+
+
+</chapter>                

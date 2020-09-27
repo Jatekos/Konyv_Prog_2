@@ -1,0 +1,345 @@
+<chapter xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xi="http://www.w3.org/2001/XInclude" version="5.0" xml:lang="hu">
+    <info>
+        <title>Helló, Arroway!</title>
+        <keywordset>
+            <keyword/>
+        </keywordset>
+    </info>
+
+    <section>
+        <title>0.hét</title>
+      
+        <para>
+          Python: Forstner Bertalan, Ekler Péter, Kelényi Imre: Bevezetés a mobilprogramozásba.
+      Gyors prototípus-fejlesztés Python és Java nyelven (35-51 oldal)
+        </para>
+        <para>
+           Általános információk: A Python egy általános célú programozási nyelv. Guido van Rossum 1990-ben
+      alkotta meg ezt a fejleszt˝ok számára rengeteg pozitív tulajdonsággal rendel- kez˝o nyelvet, amely magas
+      szint˝u, dinamikus, objektumorientált és platform- független. A fejlesztés megkönnyítéséhez magas szint˝u
+      típusokat is támogat, mint például különféle listák és szótárak.
+      El˝onyei miatt az interpretert elkészítették a Symbian mobil operációs rendszer S60 platformja alá is, hogy
+      megkönnyítsék az egyszer˝ubb szoftver és prototípusfejlesztést mobil készülékekre. A Python S60 implementáció
+      nagy- részt lefedi az alap Pythont, azonban egy-két modult kihagytak bel˝ole, amely nem kapcsolódik
+      szorosan a mobileszközökhöz.
+      A Python nyelv jellemz˝oi Amikor alkalmazásokat fejlesztünk, sok esetben szükség van olyan részek megírására
+      is, amelyek az adott probléma szempontjából nem relevánsak, el- készítésük mégis sok id˝ot vesz
+      igénybe. Ilyenek például a különféle fájlkezel˝o metódusok, hálózatkezelés, GUI kialakítása stb. A szokásos
+      programírás/forditás/tesztelés/újrafordítás ciklust egy professzi- onális C, C++ vagy Java-fejleszt˝o is
+      lassúnak találja egy id˝o után, márpedig er- re minden módosítás esetében szükség van. A Python ebben is
+      segít, esetében ugyanis nincs szükség a fordítás fázisára, az értelmez˝onek elegend˝o a Python- forr
+      A Python nyelv legf˝obb jellemz˝oje, hogy behúzásalapú a szintaxisa. A prog- ramban szerepl˝o állításokat
+      az azonos szint˝u behúzásokkal tudjuk csoportok- ba szervezni, nincs szükség kapcsos zárójelre vagy explicit
+      kulcsszavakra (pl. begin, end). Egy adott blokk végét egy kisebb behúzású sor jelzi, tehát például
+      üres sor lehet a blokkon belül. A szkript els˝o utasítása nem lehet behúzott. Fontos, hogy a behúzásokat
+      egységesen kezeljük, tehát vagy mindenhol tabot, vagy egységesen szóközt használjuk. Bizonyos szövegszerkeszt
+      ˝okben akár azt is beállíthatjuk, hogy a tab billenty˝u lenyomása 4 szóközt jelentsen. A nyelv
+      további sajátossága, hogy a sor végéig tart egy utášítás, nincs szükség a megszokott ;’ használatára.
+      Pythonban minden adatot objektumok reprezentálnak. Az adatokon végezhe- t˝o m˝uveleteket az objektum
+      típusa határozza meg. Pythonban nincs szükség a változók típusainak explicit megadására, a rendszer
+      futási id˝oben, automa- tikusan „kitalálja" a változók típusát a hozzárendelt érték alapján. Az adattípusok a
+      következ˝ok lehetnek: számok, sztringek, ennesek (tuples, n-es), listák, szótárak (dictionaries).
+      Változók és alkalmazásuk Pythonban a változók alatt az egyes objektumokra mutató referenciákat ér- tünk.
+      Maguknak a változóknak nincsenek típusai, így egy szkript futása so- rán bármely, akár különböz˝o típusú
+      objektumra is hivatkozhatnak. Ameny- nyiben egy objektumra az utolsó hivatkozást is töröljük (pl. a változói
+      már más objektumokra mutatnak), az automatikus garbage collector szabadítja fel a memóriaterületet.
+      A nem létez˝o változókra való hivatkozás futás közbeni kivételt okoz.
+      Pythonban függvényeket a def kulcsszóval definiálhatunk. A függvényekre mint értékekre is tekinthetünk,
+      hiszen azok továbbadhatók más függvények- nek, illetve objektumkonstruktoroknak is. A függvények
+      rendelkeznek para- méterekkel, amelyeknek, a szokásos megkötésekkel és szintaxissal, alapér- telmezett
+      értéket is adhatunk. A paraméterek érték szerint adódnak át, kivé- ve az úgynevezett mutable típusok (pl.
+      listák, szótárak), amelyek függvénybe- li megváltoztatása hatással van a hívókódrészletben lév˝o objektumra
+      is. Az egyes paramétereknek a szokásos szintaxissal (paraméter értelmezett értéket is adhatunk.
+      A Python nyelv támogatja a klasszikus, objektumorientált fejlesztési eljárá- sokat, amelyeket ebben az
+      alfejezetben röviden átnézünk. Definiálhatunk osztályokat, amelyek példányai az objektumok. Az osztályoknak
+      lehetnek att- ribútumaik: objektumok, illetve függvények. Ez utóbbiakat metódusoknak vagy
+      tagfüggvénynek is hívjuk. Ezenkívül az osztályok örökölhetnek más osz- tályokból is.
+        </para>
+
+      <para>
+        Összehasonlítás c++ java:
+      </para>
+      
+      <para>
+        kifejezés fogalom ua.:Kifejezések olyan kód részletek amelyek valami műveletet végeznek és a művelet eredményét adják vissza, vagypedig valami értéket reprezentálnak.
+        ,
+        stb:Java esetén egy osztály definíciója és deklarációja,azaz az eljárások feje és megvalósítása nem szétválasztható, mint például C++-ban.
+        Ahogy C++-ban, úgy a Javában is felsorolhatunk változókat,de a Java megengedi, hogy inicializáljuk is azokat,konstruktoron kívül
+        konstruktor: Ennek neve – ahogy C++-ban is – megegyezik az osztály nevével, nincs visszatérési értéke.
+        final: Végleges, azaz konstans érték (nem ugyanaz mint a C++ const! Hiszen itt a referencia az az érték, ami nem változtatható, de ettől még a hivatkozott objektum állapota változtatható)
+        Javaban minden metódus olyan, mint C++-ban a virtual kulcsszóval ellátottak.Itt a dinamikus kötés automatikusan létrejön! Ha a metódus az osztályban nem static jelzővel illetett, akkor nincs olyan momentum, amely egyértelműen az alaposztályához kötné (azaz példánymetódus). A kötés ekkor csakis dinamikus lehet, ami azért érdekes helyzet, mert előre senki sem tudhatja (legfőképpen a JVM nem), hogy éppen melyik példánymetódus fut, azaz a kötés csakis a futási idő alatt jöhet létre. Ezért illetik egyúttal a dinamikus kötést a következő jelzőkkel:futás alatti kötés:runtime binding,
+        ,késői kötés - late binding, illetve dinamikus kötés alatti példánymetódus-keresés folyamatát dinamikus metóduskeresésnek (dynamic method lookup). A keresés végeredménye ebben az esetben csakis az lehet, hogy az éppen aktuálisan futó objektum kerül végrehajtásra. c++ ehhez avirtual jelzőt kell használni
+        Javában minden objektum:referencia:
+        klónozás
+        A java a c++ szal elentétben platform fügetlen mivel egy virtuális gépen futt ez a JVM és JRE ezen felül van a JDK ami már a java programok fejélesztéséhez szükséges. Ebből következik, hogy a java programoknak roszab az optimalizáltsága a c+++ hoz képes amit a forditó programok gépi nyelvre forditanak de szintén ebből következik hogy könyebben hordozhatóak és biztonságosabak a java programok.
+
+        C++ elsősorban rendszerprogramozásra használják míg A javat alkalmazások fejlesztésére. Széleskörben használják webes, mobilos alkalmazások fejlesztésére. Ennek fő okai a könyű egységekre bontás és tagolása a programoknak.
+
+        Goto utasitás a c6+ támogatja de a java nem . (de alapvetően egy jól strukturát programban nincs is szükség a goto utasitáős használatára)
+
+        A c++ támogatja a töbszörös öröklődést míg a java nem támogatja a töbszörös öröklődést osztájok között.DE az interfacek használatával a jávában is át hidalható ez a probléma
+
+        Az operátor túlterhelést nem támogatja a java a c++szal szemben ahol ez egy bevet metódus a javaban külön fügvények segitségével oldható fel ez a probléma.,
+
+        Míg c++ teljesen ntámogatja a pointerek felhasználását a programmokban adig a java csak belsőleg támogatja őket nem írható mutatókat expőlicite használó program.
+        Ez azt jelenti, hogy a java korlátozta a mutató támogatását
+
+        C++ ban mind érték mind referencia alapján lehet hívni adig java nem támogatja a referencia alapu hívást csak érték alapu hívások vanak a jávában.
+
+        A java mindig egy öröklődési fát tartalmaz mert minden osztály az Object class gyermeke. A jávában mindig az Object Class a gyökere az öröklődési fának. Ezzel szemben a c++ mindig új öröklődési fát készit.
+        A jdk JRE JVM felépitéséből adódóan a Java nem lép kapcsolatba közvetlenül a hardwarerel míg a c++ forditási metódusából adódóan az abban írt programok igen.
+
+      </para>
+      
+       
+    </section>        
+
+    <section>
+        <title>1.hét</title>
+        <para>
+            Eljárás orientál vs Objektumorientált
+        </para>
+        <para>
+          
+Elsőként tisztázzuk a két fogalmat. Az eljárás orientált nyelvek alatt azokat értjük melyek struktúrát programozási elvek alapján működnek, mely eljárás híváson alapszik. Ezek az eljárások a program során bármikor meg hívhatóak, akár saját magukat is hívhatják. A feladatokat lépésről lépésre bontja le az eljárás orientált program változókra és eljárásokra melyek szekvenciális utasításokat tartalmaznak. Ezzel szemben az Objektumorientált nyelvek az objektumokon alapszanak melyeknek vannak tulajdonságuk és viselkedésük melyekkel képesek megváltoztatni a saját és más objektumok tulajdonságait.
+Az elmondható mind két paradigmáról, hogy kisebrészekre bontják fel a problémát ezen keresztül pedig a kódot is. A nagy különbség a kettő féle felbontásban az hogy az objektumorientáltnál sokall könnyebb utólagosan változtatni a programon egy jól meg tervezet programnál csak az adott objektumon kel választani. Míg az eljárás orientáltnál mivel az egész egy programként kezelődik így az egész program változik. Ebből következik az is, hogy az objektumorientált programok sokkal modulárisabbak egyes modulokat akár több programnál is fel lehet használni ezáltal és az által, hogy jobban tagolható az írása rövidül a fejlesztési idő is.
+Objektumorientált nyelvekben lehet szabályozni a láthatóságot (public, private, protected) mely segítségével elrejthetők az adatok ezáltal biztonságosabb mint az eljárásorientált nyelvek ahol erre nincs lehetőség.
+Az objektum orientált nyelveknél könnyebb bővités az öröklődésnek köszönhetően. Erre az eljárás orientált nyelveknél nincs lehetőség.
+        </para>
+        <para>
+           Java Object metódusok :              
+        </para>
+        <para>
+            protected Object clone(): Vissza tér egy másolatával az adott objektumnak. x.clone() != x igazat fog adni, x.clone().equals(x) igazat fog adni de ez nem elvárás a használathoz felül kel definiálni a protected miatt nem látszik.
+        </para>
+    <para>
+            Boolean equals​(Object obj) : megalapítja hogy egy objectum egyenlő-e azzal amelyből hívjuk. Abban az esetben kell felüldefiniálni ezt a  metódust ha az adott objektum más objektumot is tartalmaz mer ebben az esetben az objektum == operátorral hasonlítja össze és így csak akkor ad igazat ha ugyan arra a helyre mutatnak. Abban az esetben ha felül definiáljuk a  equals() metódust a hasCode() metódust is illik felüldefiniálni mivel az egynlő objectumoknak ugyan annak kell lenije a has kódjának.
+        </para>
+          <para>
+            Class  getClass() Viszatér az osztájal futás időben mellyel különböző információkat nyerhetünk ki az osztályról.
+        </para>
+        <para>
+            Int hashCode() Vissza tér egy has értékel az objektumra.
+Egy futtatás alatt egy adott objektumnak nem szabad változnia a has kódjának de futások között már változhat
+ha két objectom egyenlő az  equals(Object) metódus alapján akkor ugyan azt a has értéket kell hogy kapják
+az nem elvárás ha két objektum különbözik akkor külön hash vódot kapjanak
+        </para>
+        <para>
+            Void notify() Egyetlen szálat ébreszt fel, amely az objektum monitorára vár. Az felébresztett szál addig nem folytatódik, amíg az aktuális szál nem oldja fel az objektum zárolását csak az objektum „gazdája” adhatja ki ezt az utasítást. A fel ébresztett szál nem élvez semmilyen előjogot az objektumra
+        </para>
+        <para>
+            Void notifyAll() Minden szálat  fel ébreszt , amely az objektum monitorára vár. A fel ébresztett szálak nem élveznek semmilyen előjogot az objektumra
+        </para>
+        <para>
+            String toString()	 Egy stringgle tér visza ami meg adja az objektumot érdemes felül definiálni alapértellmezetten ezt a kifejezést adja vissza: getClass().getName() + '@' + Integer.toHexString(hashCode())
+        </para>
+  <para>
+            Void wait() A aktuális szál várását eredményezi míg fel nem ébresztik,vagy meg nem szakítják.
+        </para>
+     <para>
+            Void wait​(long timeout, int nanos)  aktuális szál várását eredményezi míg fel nem ébresztik,vagy meg nem szakítják vagy el nem telik a meg adott idő
+        </para>
+      
+    <para>
+      Singleton Design Pattern:
+      </para>
+      <para>
+Biztosítani kel, hogy csak egy objektum jöhessen létre az adott osztályból, ezt az objektumot mindenkinek el kel érnie. Ez azzal jár, hogy a lazán kell iniciálni az adott objektumot. 
+Előállítása: összes konstruktort felül kell definiálni egy protecteddel vagy private függvénnyel és kel egy statikus függvény ami hívja a konstruktort ha még nem létezik az adott objektum
+Akkor érdemes használni ha egy objektumból pontosan egy darab kell pl.:facade objestc,State object.
+</para><para>
+Abstract Factory Design Pattern
+</para><para>
+A lényege a Abstract Factory-nek hogy interfacet adjon ahhoz hogy családokat hozzunk létre összetartozó objektumokból. A japán autó gyártásban használt modellt modellezi ahol egy prés
+kis változásokkal képes több típus adott elemét elő állítani. A programozásban a hordozhatóságra ad egy megoldást ahol az adott rendszerhez kell alkalmazkodni de ez sok #ifdef részel járhat a programban.(sokszor használ singletont az egyes objektumok hoz)
+</para><para>
+Builder Design Pattern
+</para><para>
+El választja az elkészítését egy összetett objektumnak a reprezentációjától és ezzel eléri, hogy ez az eljárás képes legyen különböző  reprezentációkat el készíteni. 
+</para><para>
+Factory Method Design Pattern:
+</para><para>
+Meg ad egy felületet egy objektum létrehozásához, de hagyja, hogy az alosztályok döntsék el, melyik osztályt kell példányosítani.
+A Factory Method lehetővé teszi, hogy az osztály megengedi az alosztályok példányosítását. Definiál egy virtuális konstruktort. A new operátor ártalmas lehet.
+</para><para>
+Object Pool Design Pattern
+</para><para>
+Az object pool jelentős teljesítménynövekedést kínálhat; leghatékonyabb azokban a helyzetekben, amikor az osztálypéldány inicializálásának költsége magas, az osztály példányosítási aránya magas, és az egyszerre használt példányszám alacsony.
+Az Object Pool (más néven erőforráskészletek) az objektum-gyorsítótár kezelésére szolgálnak. Az Objektumkészlethez hozzáférő kliens elkerülheti az új Objektumok létrehozását, ha egyszerűen megkéri a készletet hogy adjon egy már példányosítottat. Általában a pool növekvő medence lesz, vagyis maga a pool új objektumokat hoz létre, ha a pool üres, vagy rendelkezhetünk pool-lal, ami korlátozza a létrehozott objektumok számát.
+</para><para>
+Prototype Design Pattern
+</para><para>
+létre hoz egy objektumot majd ezt az objektumot módosítja és clonozza ehez használnia kell a clone abel interfészt .  A new operátor káros. Egy objektüm az őse minden objekumnak
+    </para>
+
+      <para>
+        OO szemlélet
+      </para>
+      <para>
+        C++ ban:
+      </para>
+      <programlisting language="c++">
+        <![CDATA[
+#include <iostream>
+#include <cstdlib>
+#include <cmath>
+#include <ctime>
+
+class ElsoOsztajom
+{
+private:
+    bool letezikKovVeletlen;
+    double kovVeletlen;
+public:
+    ElsoOsztajom();
+    ~ElsoOsztajom();
+
+    double veletlen();
+};
+
+ElsoOsztajom::ElsoOsztajom()
+{
+    letezikKovVeletlen=false;
+}
+
+ElsoOsztajom::~ElsoOsztajom()
+{
+}
+
+double ElsoOsztajom::veletlen()
+{
+    if (letezikKovVeletlen)
+    {
+        letezikKovVeletlen =false;
+        return kovVeletlen;
+    }
+    else
+    {
+        double u1, u2, v1, v2, w;
+        do 
+        {
+            u1=std::rand()/(RAND_MAX+1.0);
+            u2=std::rand()/(RAND_MAX+1.0);
+            v1=2*u1-1;
+            v2=2*u2-1;
+            w=v1*v1+v2*v2;
+        }
+        while (w>1);
+        double r =std::sqrt((-2*std::log(w))/w);
+        
+        kovVeletlen=r*v2;
+        letezikKovVeletlen =true;
+        
+        return r*v1;
+    }
+    
+
+}
+
+int main(){
+    double j=0;
+    ElsoOsztajom r;
+    for (int i=0; i<5; i++)
+    {
+        j=r.veletlen();
+        std::cout<<j<<std::endl;
+    }
+   
+}]]>
+      </programlisting>
+
+
+      <para>
+        Javaban:
+      </para>
+      <programlisting language="c++">
+        <![CDATA[
+PolarGenerator:
+        
+package ooszemlelet;
+
+import java.lang.Math;
+
+public class PolarGenerator {
+	
+	private boolean isStored = false;
+	private double stord;
+	
+	public double giveTheNext() {
+		
+		if (isStored) {
+			
+			isStored = !isStored;
+			return stord; 
+			
+			
+		} else {
+			
+			double u1, u2, v1, v2 ,w;
+			
+			do {				
+				u1 = Math.random();
+				u2 = Math.random();
+				v1 = 2 * u1 - 1;
+				v2 = 2 * u2 - 1;
+				w = v1 * v1 + v2 * v2;				
+			}
+			while (w>1);
+			
+			double r =Math.sqrt((-2 * Math.log(w)) / w);
+			stord=r * v2;
+			isStored = !isStored;
+			return r*v1;
+						
+		}
+	}
+	
+	
+	
+}
+
+
+Main:
+
+package ooszemlelet;
+
+
+
+public class Main {
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		
+		PolarGenerator g = new PolarGenerator();
+		for (int i=0; i<10 ; i++) {
+			System.out.println(g.giveTheNext());
+		}
+
+	}
+
+}
+
+]]>
+      </programlisting>
+
+
+    </section>    
+  
+  <section>
+        <title>Java osztályok a Pi-ben</title>
+        <para>
+            Az előző feladat kódját fejleszd tovább: vizsgáld, hogy Vannak-e Java osztályok a Pi hexadecimális kifejtésében!
+        </para>
+        <para>
+            Megoldás videó:
+        </para>
+        <para>
+            Megoldás forrása:                
+        </para>
+        <para>
+            Tanulságok, tapasztalatok, magyarázat...
+        </para>
+    </section>     
+        
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        
+</chapter>                
