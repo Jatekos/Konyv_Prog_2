@@ -1,0 +1,603 @@
+<chapter xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xi="http://www.w3.org/2001/XInclude" version="5.0" xml:lang="hu">
+    <info>
+        <title>Helló, Caesar!</title>
+        <keywordset>
+            <keyword/>
+        </keywordset>
+    </info>
+    <section>
+        <title><type>double **</type> háromszögmátrix</title>
+        <para>
+            Írj egy olyan <function>malloc</function> és <function>free</function>
+            párost használó C programot, amely helyet foglal
+            egy alsó háromszög mátrixnak a szabad tárban!
+        </para>
+        <para>
+            Megoldás videó: <link xlink:href="https://youtu.be/1MRTuKwRsB0">https://youtu.be/1MRTuKwRsB0</link>,
+            <link xlink:href="https://youtu.be/RKbX5-EWpzA">https://youtu.be/RKbX5-EWpzA</link>.
+        </para>
+		<para>
+		Magyarázó videóm: <link xlink:href="https://www.youtube.com/watch?v=xEXzjmik9Do">https://www.youtube.com/watch?v=xEXzjmik9Do</link>,
+		</para>
+        <para>
+            Megoldás forrása: <link xlink:href="Caesar/tm.c">
+                <filename>bhax/thematic_tutorials/bhax_textbook_IgyNeveldaProgramozod/Caesar/tm.c</filename>
+            </link> 
+        </para>
+        <programlisting language="c"><![CDATA[#include <stdio.h>
+#include <stdlib.h>
+
+int
+main ()
+{
+    int nr = 5;
+    double **tm;
+
+    if ((tm = (double **) malloc (nr * sizeof (double *))) == NULL)
+    {
+        return -1;
+    }
+
+    for (int i = 0; i < nr; ++i)
+    {
+        if ((tm[i] = (double *) malloc ((i + 1) * sizeof (double))) == NULL)
+        {
+            return -1;
+        }
+
+    }
+
+    for (int i = 0; i < nr; ++i)
+        for (int j = 0; j < i + 1; ++j)
+            tm[i][j] = i * (i + 1) / 2 + j;
+
+    for (int i = 0; i < nr; ++i)
+    {
+        for (int j = 0; j < i + 1; ++j)
+            printf ("%f, ", tm[i][j]);
+        printf ("\n");
+    }
+
+    tm[3][0] = 42.0;
+    (*(tm + 3))[1] = 43.0;	//mi van, ha itt hiányzik a küls˝o ()4.sor 0.dik elemébe  irja bele 
+    *(tm[3] + 2) = 44.0;
+    *(*(tm + 3) + 3) = 45.0;
+
+    for (int i = 0; i < nr; ++i)
+    {
+        for (int j = 0; j < i + 1; ++j)
+            printf ("%f, ", tm[i][j]);
+        printf ("\n");
+    }
+
+    for (int i = 0; i < nr; ++i)
+        free (tm[i]);
+
+    free (tm);
+
+    return 0;
+}]]></programlisting>
+        <figure>
+            <title>A <type>double **</type> háromszögmátrix a memóriában</title>
+            <mediaobject>
+                <imageobject>
+                    <imagedata fileref="img/doublecscs.png" scale="50" />
+                </imageobject>
+                <textobject>
+                    <phrase>A <type>double **</type> háromszögmátrix a memóriában</phrase>
+                </textobject>
+            </mediaobject>
+        </figure>                             
+        <para>
+            Tanulságok, tapasztalatok, magyarázat...
+        </para>            
+    </section>        
+    <section>
+        <title>C EXOR titkosító</title>
+        <para>
+            Írj egy EXOR titkosítót C-ben!
+        </para>
+        <para>
+            Megoldás videó:
+        </para>
+        <para>
+            Megoldás forrása:                
+        </para>
+        <para>
+                   <programlisting language="c"><![CDATA[#include <stdio.h>
+#include <unistd.h>
+#include <string.h>
+
+#define MAX_KULCS 100
+#define BUFFER_MERET 256
+
+
+int
+main (int argc, char **argv)
+{
+
+  char kulcs[MAX_KULCS];
+  char buffer[BUFFER_MERET];
+
+  int kulcs_index = 0;
+  int olvasott_bajtok = 0;
+
+  int kulcs_meret = strlen (argv[1]);
+  strncpy (kulcs, argv[1], MAX_KULCS);
+
+  while ((olvasott_bajtok = read (0, (void *) buffer, BUFFER_MERET)))
+    {
+
+      for (int i = 0; i < olvasott_bajtok; ++i)
+	{
+
+	  buffer[i] = buffer[i] ^ kulcs[kulcs_index];
+	  kulcs_index = (kulcs_index + 1) % kulcs_meret;
+
+	}
+
+      write (1, buffer, olvasott_bajtok);
+
+    }
+}]]></programlisting>
+        </para>
+        <para>
+            A program induláskor meg kapja  kulcsot és a titkosítandó szöveget  majd  majd a kulcs meg és a titkosítandó szöveg között el végzi az exor műveletet (amikor  kulcs végére ér újra kezdi azt míg a titkosítandó szöveg végére nem ér). Ez után pedig ki írja az immáron titkosított szöveget. 
+            </para>
+    </section>        
+    <section>
+        <title>Java EXOR titkosító</title>
+        <para>
+            Írj egy EXOR titkosítót Java-ban!
+        </para>
+        <para>
+            Megoldás videó:
+        </para>
+        <para>
+            Megoldás forrása: <link xlink:href="https://www.tankonyvtar.hu/hu/tartalom/tkt/javat-tanitok-javat/ch01.html#exor_titkosito">https://www.tankonyvtar.hu/hu/tartalom/tkt/javat-tanitok-javat/ch01.html#exor_titkosito</link>               
+        </para>
+        <para>
+            Tanulságok, tapasztalatok, magyarázat...
+        </para>            
+    </section>        
+    <section xml:id="bhax-textbook-feladatok-caesar.EXOR-toro">
+        <title>C EXOR törő</title>
+        <para>
+            Írj egy olyan C programot, amely megtöri az első feladatban előállított titkos szövegeket!
+        </para>
+        <para>
+            Megoldás videó:
+        </para>
+        <para>
+            Megoldás forrása:                
+        </para>
+        <para>
+                      <programlisting language="c"><![CDATA[#define MAX_TITKOS 4096
+#define OLVASAS_BUFFER 256
+#define KULCS_MERET 8
+#define _GNU_SOURCE
+
+#include <stdio.h>
+#include <unistd.h>
+#include <string.h>
+
+double
+atlagos_szohossz (const char *titkos, int titkos_meret)
+{
+  int sz = 0;
+  for (int i = 0; i < titkos_meret; ++i)
+    if (titkos[i] == ' ')
+      ++sz;
+
+  return (double) titkos_meret / sz;
+}
+
+int
+tiszta_lehet (const char *titkos, int titkos_meret)
+{
+  // a tiszta szoveg valszeg tartalmazza a gyakori magyar szavakat
+  // illetve az átlagos szóhossz vizsgálatával csökkentjük a
+  // potenciális töréseket
+
+  double szohossz = atlagos_szohossz (titkos, titkos_meret);
+
+  return szohossz > 6.0 && szohossz < 9.0
+    && strcasestr (titkos, "hogy") && strcasestr (titkos, "nem")
+    && strcasestr (titkos, "az") && strcasestr (titkos, "ha");
+
+}
+
+void
+exor (const char kulcs[], int kulcs_meret, char titkos[], int titkos_meret)
+{
+
+  int kulcs_index = 0;
+
+  for (int i = 0; i < titkos_meret; ++i)
+    {
+
+      titkos[i] = titkos[i] ^ kulcs[kulcs_index];
+      kulcs_index = (kulcs_index + 1) % kulcs_meret;
+
+    }
+
+}
+
+int
+exor_tores (const char kulcs[], int kulcs_meret, char titkos[],
+	    int titkos_meret)
+{
+
+  exor (kulcs, kulcs_meret, titkos, titkos_meret);
+
+  return tiszta_lehet (titkos, titkos_meret);
+
+}
+
+int
+main (void)
+{
+
+  char kulcs[KULCS_MERET];
+  char titkos[MAX_TITKOS];
+  char *p = titkos;
+  int olvasott_bajtok;
+
+  // titkos fajt berantasa
+  while ((olvasott_bajtok =
+	  read (0, (void *) p,
+		(p - titkos + OLVASAS_BUFFER <
+		 MAX_TITKOS) ? OLVASAS_BUFFER : titkos + MAX_TITKOS - p)))
+    p += olvasott_bajtok;
+
+  // maradek hely nullazasa a titkos bufferben  
+  for (int i = 0; i < MAX_TITKOS - (p - titkos); ++i)
+    titkos[p - titkos + i] = '\0';
+
+  // osszes kulcs eloallitasa
+  for (int ii = '0'; ii <= '9'; ++ii)
+    for (int ji = '0'; ji <= '9'; ++ji)
+      for (int ki = '0'; ki <= '9'; ++ki)
+	for (int li = '0'; li <= '9'; ++li)
+	  for (int mi = '0'; mi <= '9'; ++mi)
+	    for (int ni = '0'; ni <= '9'; ++ni)
+	      for (int oi = '0'; oi <= '9'; ++oi)
+		for (int pi = '0'; pi <= '9'; ++pi)
+		  {
+		    kulcs[0] = ii;
+		    kulcs[1] = ji;
+		    kulcs[2] = ki;
+		    kulcs[3] = li;
+		    kulcs[4] = mi;
+		    kulcs[5] = ni;
+		    kulcs[6] = oi;
+		    kulcs[7] = pi;
+
+		    if (exor_tores (kulcs, KULCS_MERET, titkos, p - titkos))
+		      printf
+			("Kulcs: [%c%c%c%c%c%c%c%c]\nTiszta szoveg: [%s]\n",
+			 ii, ji, ki, li, mi, ni, oi, pi, titkos);
+
+		    // ujra EXOR-ozunk, igy nem kell egy masodik buffer  
+		    exor (kulcs, KULCS_MERET, titkos, p - titkos);
+		  }
+
+  return 0;
+}]]></programlisting>
+        </para>      
+        <para>
+            A törő szisztematikusan végig megy az összes lehetséges kulcson ebben az esetben egy 8 karakter hoszu szám sorozaton. Minden egyes kulccsal meg próbálja dekódolni és ez után a dekódolt szövegben meg nézi az átlagos szó hosszt és pár gyakori szót (ezek nyelv specifikus adatok). Ezek alapján válogatja ki a lehetséges helyes kulcsokat.
+        </para>
+        
+    </section>        
+    <section>
+        <title>Neurális OR, AND és EXOR kapu</title>
+        <para>
+            R
+        </para>
+        <para>
+            Megoldás videó: <link xlink:href="https://youtu.be/Koyw6IH5ScQ">https://youtu.be/Koyw6IH5ScQ</link>
+        </para>
+        <para>
+            Megoldás forrása: <link xlink:href="https://gitlab.com/nbatfai/bhax/tree/master/attention_raising/NN_R">https://gitlab.com/nbatfai/bhax/tree/master/attention_raising/NN_R</link>               
+        </para>
+        <para>
+            Tanulságok, tapasztalatok, magyarázat...
+        </para>            
+    </section>        
+    <section>
+        <title>Hiba-visszaterjesztéses perceptron</title>
+        <para>
+            C++
+        </para>
+        <para>
+            Megoldás videó: <link xlink:href="https://youtu.be/XpBnR31BRJY">https://youtu.be/XpBnR31BRJY</link>
+        </para>
+        <para>
+            Megoldás forrása: <link xlink:href="https://github.com/nbatfai/nahshon/blob/master/ql.hpp#L64">https://github.com/nbatfai/nahshon/blob/master/ql.hpp#L64</link>               
+        </para>
+        <para>
+            <programlisting language="c++"><![CDATA[#include <iostream>
+#include "mlp.hpp"
+#include <png++/png.hpp>
+
+int main(int argc, char **argv)
+{
+	png::image <png::rgb_pixel> png_image(argv[1]);
+
+	int size = png_image.get_width() * png_image.get_height();
+
+	Perceptron* p = new Perceptron(3, size, 256, 1);
+
+	double* image = new double[size];
+	
+	for (int i = 0; i < png_image.get_width(); ++i) {
+		for (int j = 0; j < png_image.get_height(); ++j) {
+			image[i * png_image.get_width() + j] = png_image[i][j].red;
+		}
+	}
+	
+	double value = (*p) (image);
+
+	std::cout << value << std::endl;
+	
+	delete p;
+	delete[] image;
+}
+            ]]></programlisting>
+        <programlisting language="c++"><![CDATA[
+ /**
+ * @brief JUDAH - Jacob is equipped with a text-based user interface
+ *
+ * @file ql.hpp
+ * @author  Norbert Bátfai <nbatfai@gmail.com>
+ * @version 0.0.1
+ *
+ * @section LICENSE
+ *
+ * Copyright (C) 2015 Norbert Bátfai, batfai.norbert@inf.unideb.hu
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @section DESCRIPTION
+ *
+ * JACOB, https://github.com/nbatfai/jacob
+ *
+ * "The son of Isaac is Jacob." The project called Jacob is an experiment
+ * to replace Isaac's (GUI based) visual imagination with a character console.
+ *
+ * ISAAC, https://github.com/nbatfai/isaac
+ *
+ * "The son of Samu is Isaac." The project called Isaac is a case study
+ * of using deep Q learning with neural networks for predicting the next
+ * sentence of a conversation.
+ *
+ * SAMU, https://github.com/nbatfai/samu
+ *
+ * The main purpose of this project is to allow the evaluation and
+ * verification of the results of the paper entitled "A disembodied
+ * developmental robotic agent called Samu Bátfai". It is our hope
+ * that Samu will be the ancestor of developmental robotics chatter
+ * bots that will be able to chat in natural language like humans do.
+ *
+ */
+#include <iostream>
+#include <cstdarg>
+#include <map>
+#include <iterator>
+#include <cmath>
+#include <random>
+#include <limits>
+#include <fstream>
+class Perceptron
+{
+public:
+	Perceptron(int nof, ...)
+	{
+		n_layers = nof;
+		units = new double* [n_layers];
+		n_units = new int[n_layers];
+		va_list vap;
+		va_start(vap, nof);
+		for (int i{ 0 }; i < n_layers; ++i)
+		{
+			n_units[i] = va_arg(vap, int);
+			if (i)
+				units[i] = new double[n_units[i]];
+		}
+		va_end(vap);
+		weights = new double** [n_layers - 1];
+#ifndef RND_DEBUG
+		std::random_device init;
+		std::default_random_engine gen{ init() };
+#else
+		std::default_random_engine gen;
+#endif
+		std::uniform_real_distribution<double> dist(-1.0, 1.0);
+		for (int i{ 1 }; i < n_layers; ++i)
+		{
+			weights[i - 1] = new double* [n_units[i]];
+			for (int j{ 0 }; j < n_units[i]; ++j)
+			{
+				weights[i - 1][j] = new double[n_units[i - 1]];
+				for (int k{ 0 }; k < n_units[i - 1]; ++k)
+				{
+					weights[i - 1][j][k] = dist(gen);
+				}
+			}
+		}
+	}
+	Perceptron(std::fstream& file)
+	{
+		file >> n_layers;
+		units = new double* [n_layers];
+		n_units = new int[n_layers];
+		for (int i{ 0 }; i < n_layers; ++i)
+		{
+			file >> n_units[i];
+			if (i)
+				units[i] = new double[n_units[i]];
+		}
+		weights = new double** [n_layers - 1];
+		for (int i{ 1 }; i < n_layers; ++i)
+		{
+			weights[i - 1] = new double* [n_units[i]];
+			for (int j{ 0 }; j < n_units[i]; ++j)
+			{
+				weights[i - 1][j] = new double[n_units[i - 1]];
+				for (int k{ 0 }; k < n_units[i - 1]; ++k)
+				{
+					file >> weights[i - 1][j][k];
+				}
+			}
+		}
+	}
+	double sigmoid(double x)
+	{
+		return 1.0 / (1.0 + exp(-x));
+	}
+	double operator() (double image[])
+	{
+		units[0] = image;
+		for (int i{ 1 }; i < n_layers; ++i)
+		{
+#ifdef CUDA_PRCPS
+			cuda_layer(i, n_units, units, weights);
+#else
+#pragma omp parallel for
+			for (int j = 0; j < n_units[i]; ++j)
+			{
+				units[i][j] = 0.0;
+				for (int k = 0; k < n_units[i - 1]; ++k)
+				{
+					units[i][j] += weights[i - 1][j][k] * units[i - 1][k];
+				}
+				units[i][j] = sigmoid(units[i][j]);
+			}
+#endif
+		}
+		return sigmoid(units[n_layers - 1][0]);
+	}
+	void learning(double image[], double q, double prev_q)
+	{
+		double y[1]{ q };
+		learning(image, y);
+	}
+	
+	
+	void learning(double image[], double y[])
+	{
+		//( *this ) ( image );
+		units[0] = image;
+		double** backs = new double* [n_layers - 1];
+		for (int i{ 0 }; i < n_layers - 1; ++i)
+		{
+			backs[i] = new double[n_units[i + 1]];
+		}
+		int i{ n_layers - 1 };
+		for (int j{ 0 }; j < n_units[i]; ++j)
+		{
+			backs[i - 1][j] = sigmoid(units[i][j]) * (1.0 - sigmoid(units[i][j])) * (y[j] - units[i][j]);
+			for (int k{ 0 }; k < n_units[i - 1]; ++k)
+			{
+				weights[i - 1][j][k] += (0.2 * backs[i - 1][j] * units[i - 1][k]);
+			}
+		}
+		for (int i{ n_layers - 2 }; i > 0; --i)
+		{
+#pragma omp parallel for
+			for (int j = 0; j < n_units[i]; ++j)
+			{
+				double sum = 0.0;
+				for (int l = 0; l < n_units[i + 1]; ++l)
+				{
+					sum += 0.19 * weights[i][l][j] * backs[i][l];
+				}
+				backs[i - 1][j] = sigmoid(units[i][j]) * (1.0 - sigmoid(units[i][j])) * sum;
+				for (int k = 0; k < n_units[i - 1]; ++k)
+				{
+					weights[i - 1][j][k] += (0.19 * backs[i - 1][j] * units[i - 1][k]);
+				}
+			}
+		}
+		for (int i{ 0 }; i < n_layers - 1; ++i)
+		{
+			delete[] backs[i];
+		}
+		delete[] backs;
+	}
+	
+	~Perceptron()
+	{
+		for (int i{ 1 }; i < n_layers; ++i)
+		{
+			for (int j{ 0 }; j < n_units[i]; ++j)
+			{
+				delete[] weights[i - 1][j];
+			}
+			delete[] weights[i - 1];
+		}
+		delete[] weights;
+		for (int i{ 0 }; i < n_layers; ++i)
+		{
+			if (i)
+				delete[] units[i];
+		}
+		delete[] units;
+		delete[] n_units;
+	}
+	void save(std::fstream& out)
+	{
+		out << " "
+			<< n_layers;
+		for (int i{ 0 }; i < n_layers; ++i)
+			out << " " << n_units[i];
+		for (int i{ 1 }; i < n_layers; ++i)
+		{
+			for (int j{ 0 }; j < n_units[i]; ++j)
+			{
+				for (int k{ 0 }; k < n_units[i - 1]; ++k)
+				{
+					out << " "
+						<< weights[i - 1][j][k];
+				}
+			}
+		}
+	}
+private:
+	Perceptron(const Perceptron&);
+	Perceptron& operator= (const Perceptron&);
+	int n_layers;
+	int* n_units;
+	double** units;
+	double*** weights;
+}; ]]></programlisting>
+        </para> 
+      
+        <para>
+             Létre hozunk egy három rétegű hálót (az első réteg a kép pontjainak száma a második 256 az utolsó pedig 1 elemü) aminek az első rétege kép pontjainak rgb kódjának a red értékéből töltjük fel  a következő rétegeket pedig az előző réteg pontjaiból és a hozzájuk való súly összegével. Az utolsó egy elemű rétegben ki alakuló értéket pedig ki íratjuk  a képernyőre. 
+            </para>
+		<para>
+			Az mlp.hpp-ben több példát látunk a double** és double*** használatára. A double** -ban a
+			 units-okat tároljuk először lefoglalunk benne annyi double * ahány rétegünk van azután pedig  
+			 rétegenként lefoglaljuk a meg felelő mennyiségű dobule-t. A double*** weighst-ban a súlyokat 
+			 tároljuk először lefoglalunk rétegek -1 dobule ** -ot azért kel ennyit mert csak a rétegek 
+			 között vannak súlyok az ezután lefoglalt dobule* a meg felelő rétegekben található unitoknak  
+			 a száma  ezután pedig lefoglaljuk a megfelelő unitokhoz tartozó súlyt. Egy unithoz a következő 
+			 rétegben lévő unitokkal meg egyező mennyiségű súlyt kell lefoglalni.
+		</para> 
+    </section>        
+        
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        
+</chapter>                

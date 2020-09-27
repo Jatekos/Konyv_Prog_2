@@ -1,0 +1,2470 @@
+<chapter xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xi="http://www.w3.org/2001/XInclude" version="5.0" xml:lang="hu">
+    <info>
+        <title>Helló, Conway!</title>
+        <keywordset>
+            <keyword/>
+        </keywordset>
+    </info>
+    <section>
+        <title>Hangyaszimulációk</title>
+        <para>
+            Írj Qt C++-ban egy hangyaszimulációs programot, a forrásaidról utólag reverse engineering jelleggel
+            készíts UML osztálydiagramot is!
+        </para>
+        <para><link xlink:href="https://www.youtube.com/watch?v=uHbM36lrq4o">https://www.youtube.com/watch?v=uHbM36lrq4o</link>
+       
+        </para>
+        <para>
+        Main:
+        </para>
+         <programlisting language="c++">
+          <![CDATA[
+// BHAX Myrmecologist
+//
+// Copyright (C) 2019
+// Norbert BÃ¡tfai, batfai.norbert@inf.unideb.hu
+//
+//  This program is free software: you can redistribute it and/or modify
+//  it under the terms of the GNU General Public License as published by
+//  the Free Software Foundation, either version 3 of the License, or
+//  (at your option) any later version.
+//
+//  This program is distributed in the hope that it will be useful,
+//  but WITHOUT ANY WARRANTY; without even the implied warranty of
+//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//  GNU General Public License for more details.
+//
+//  You should have received a copy of the GNU General Public License
+//  along with this program.  If not, see <https://www.gnu.org/licenses/>.
+//
+// https://bhaxor.blog.hu/2018/09/26/hangyaszimulaciok
+// https://bhaxor.blog.hu/2018/10/10/myrmecologist
+// 
+
+#include <QApplication>
+#include <QDesktopWidget>
+#include <QDebug>
+#include <QDateTime>
+#include <QCommandLineOption>
+#include <QCommandLineParser>
+
+#include "antwin.h"
+
+/*
+ * 
+ * ./myrmecologist -w 250 -m 150 -n 400 -t 10 -p 5 -f 80 -d 0 -a 255 -i 3 -s 3  -c 22
+ *
+ */
+
+int main ( int argc, char *argv[] )
+{
+
+    QApplication a ( argc, argv );
+
+    QCommandLineOption szeles_opt ( {"w","szelesseg"}, "Oszlopok (cellakban) szama.", "szelesseg", "200" );
+    QCommandLineOption magas_opt ( {"m","magassag"}, "Sorok (cellakban) szama.", "magassag", "150" );
+    QCommandLineOption hangyaszam_opt ( {"n","hangyaszam"}, "Hangyak szama.", "hangyaszam", "100" );
+    QCommandLineOption sebesseg_opt ( {"t","sebesseg"}, "2 lepes kozotti ido (millisec-ben).", "sebesseg", "100" );
+    QCommandLineOption parolgas_opt ( {"p","parolgas"}, "A parolgas erteke.", "parolgas", "8" );
+    QCommandLineOption feromon_opt ( {"f","feromon"}, "A hagyott nyom erteke.", "feromon", "11" );
+    QCommandLineOption szomszed_opt ( {"s","szomszed"}, "A hagyott nyom erteke a szomszedokban.", "szomszed", "3" );
+    QCommandLineOption alapertek_opt ( {"d","alapertek"}, "Indulo ertek a cellakban.", "alapertek", "1" );
+    QCommandLineOption maxcella_opt ( {"a","maxcella"}, "Cella max erteke.", "maxcella", "50" );
+    QCommandLineOption mincella_opt ( {"i","mincella"}, "Cella min erteke.", "mincella", "2" );
+    QCommandLineOption cellamerete_opt ( {"c","cellameret"}, "Hany hangya fer egy cellaba.", "cellameret", "4" );
+    QCommandLineParser parser;
+
+    parser.addHelpOption();
+    parser.addVersionOption();
+    parser.addOption ( szeles_opt );
+    parser.addOption ( magas_opt );
+    parser.addOption ( hangyaszam_opt );
+    parser.addOption ( sebesseg_opt );
+    parser.addOption ( parolgas_opt );
+    parser.addOption ( feromon_opt );
+    parser.addOption ( szomszed_opt );
+    parser.addOption ( alapertek_opt );
+    parser.addOption ( maxcella_opt );
+    parser.addOption ( mincella_opt );
+    parser.addOption ( cellamerete_opt );
+
+    parser.process ( a );
+
+    QString szeles = parser.value ( szeles_opt );
+    QString magas = parser.value ( magas_opt );
+    QString n = parser.value ( hangyaszam_opt );
+    QString t = parser.value ( sebesseg_opt );
+    QString parolgas = parser.value ( parolgas_opt );
+    QString feromon = parser.value ( feromon_opt );
+    QString szomszed = parser.value ( szomszed_opt );
+    QString alapertek = parser.value ( alapertek_opt );
+    QString maxcella = parser.value ( maxcella_opt );
+    QString mincella = parser.value ( mincella_opt );
+    QString cellameret = parser.value ( cellamerete_opt );
+
+    qsrand ( QDateTime::currentMSecsSinceEpoch() );
+
+    AntWin w ( szeles.toInt(), magas.toInt(), t.toInt(), n.toInt(), feromon.toInt(), szomszed.toInt(), parolgas.toInt(),
+               alapertek.toInt(), mincella.toInt(), maxcella.toInt(),
+               cellameret.toInt());
+ /*   AntWin w ( szeles.toInt(), magas.toInt(), t.toInt(), n.toInt(), feromon.toInt(), szomszed.toInt(), parolgas.toInt(),
+                      alapertek.toInt(), mincella.toInt(), maxcella.toInt(),
+                      cellameret.toInt() );
+   */
+
+
+//myrmecologist -w 250 -m 150 -n 400 -t 10 -p 5 -f 80 -d 0 -a 255 -i 3 -s 3  -c 22
+    w.show();
+
+    return a.exec();
+}
+
+          ]]>
+        </programlisting>  
+         <para>
+        antwin.h:
+        </para>
+         <programlisting language="c++">
+          <![CDATA[   
+          // BHAX Myrmecologist
+//
+// Copyright (C) 2019
+// Norbert BÃ¡tfai, batfai.norbert@inf.unideb.hu
+//
+//  This program is free software: you can redistribute it and/or modify
+//  it under the terms of the GNU General Public License as published by
+//  the Free Software Foundation, either version 3 of the License, or
+//  (at your option) any later version.
+//
+//  This program is distributed in the hope that it will be useful,
+//  but WITHOUT ANY WARRANTY; without even the implied warranty of
+//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//  GNU General Public License for more details.
+//
+//  You should have received a copy of the GNU General Public License
+//  along with this program.  If not, see <https://www.gnu.org/licenses/>.
+//
+// https://bhaxor.blog.hu/2018/09/26/hangyaszimulaciok
+// https://bhaxor.blog.hu/2018/10/10/myrmecologist
+// 
+
+#ifndef ANTWIN_H
+#define ANTWIN_H
+
+#include <QMainWindow>
+#include <QPainter>
+#include <QString>
+#include <QCloseEvent>
+#include "antthread.h"
+#include "ant.h"
+
+class AntWin : public QMainWindow
+{
+    Q_OBJECT
+
+public:
+    AntWin(int width = 100, int height = 75,
+           int delay = 120, int numAnts = 100,
+           int pheromone = 10, int nbhPheromon = 3,
+           int evaporation = 2, int cellDef = 1,
+           int min = 2, int max = 50,
+           int cellAntMax = 4, QWidget *parent = 0);
+
+    AntThread* antThread;
+
+    void closeEvent ( QCloseEvent *event ) {
+
+        antThread->finish();
+        antThread->wait();
+        event->accept();
+    }
+
+    void keyPressEvent ( QKeyEvent *event )
+    {
+
+        if ( event->key() == Qt::Key_P ) {
+            antThread->pause();
+        } else if ( event->key() == Qt::Key_Q
+                    ||  event->key() == Qt::Key_Escape ) {
+            close();
+        }
+
+    }
+
+    virtual ~AntWin();
+    void paintEvent(QPaintEvent*);
+
+private:
+
+    int ***grids;
+    int **grid;
+    int gridIdx;
+    int cellWidth;
+    int cellHeight;
+    int width;
+    int height;
+    int max;
+    int min;
+    Ants* ants;
+
+public slots :
+    void step ( const int &);
+
+};
+
+#endif
+        
+          ]]>
+        </programlisting>   
+         <para>
+        antwin.cpp:
+        </para>
+         <programlisting language="c++">
+          <![CDATA[  
+          // BHAX Myrmecologist
+//
+// Copyright (C) 2019
+// Norbert BÃ¡tfai, batfai.norbert@inf.unideb.hu
+//
+//  This program is free software: you can redistribute it and/or modify
+//  it under the terms of the GNU General Public License as published by
+//  the Free Software Foundation, either version 3 of the License, or
+//  (at your option) any later version.
+//
+//  This program is distributed in the hope that it will be useful,
+//  but WITHOUT ANY WARRANTY; without even the implied warranty of
+//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//  GNU General Public License for more details.
+//
+//  You should have received a copy of the GNU General Public License
+//  along with this program.  If not, see <https://www.gnu.org/licenses/>.
+//
+// https://bhaxor.blog.hu/2018/09/26/hangyaszimulaciok
+// https://bhaxor.blog.hu/2018/10/10/myrmecologist
+// 
+
+#ifndef ANTWIN_H
+#define ANTWIN_H
+
+#include <QMainWindow>
+#include <QPainter>
+#include <QString>
+#include <QCloseEvent>
+#include "antthread.h"
+#include "ant.h"
+
+class AntWin : public QMainWindow
+{
+    Q_OBJECT
+
+public:
+    AntWin(int width = 100, int height = 75,
+           int delay = 120, int numAnts = 100,
+           int pheromone = 10, int nbhPheromon = 3,
+           int evaporation = 2, int cellDef = 1,
+           int min = 2, int max = 50,
+           int cellAntMax = 4, QWidget *parent = 0);
+
+    AntThread* antThread;
+
+    void closeEvent ( QCloseEvent *event ) {
+
+        antThread->finish();
+        antThread->wait();
+        event->accept();
+    }
+
+    void keyPressEvent ( QKeyEvent *event )
+    {
+
+        if ( event->key() == Qt::Key_P ) {
+            antThread->pause();
+        } else if ( event->key() == Qt::Key_Q
+                    ||  event->key() == Qt::Key_Escape ) {
+            close();
+        }
+
+    }
+
+    virtual ~AntWin();
+    void paintEvent(QPaintEvent*);
+
+private:
+
+    int ***grids;
+    int **grid;
+    int gridIdx;
+    int cellWidth;
+    int cellHeight;
+    int width;
+    int height;
+    int max;
+    int min;
+    Ants* ants;
+
+public slots :
+    void step ( const int &);
+
+};
+
+#endif
+ 
+          
+          ]]>
+        </programlisting>  
+         <para>
+        anthread.h:
+        </para>
+         <programlisting language="c++">
+          <![CDATA[   
+          // BHAX Myrmecologist
+//
+// Copyright (C) 2019
+// Norbert BÃ¡tfai, batfai.norbert@inf.unideb.hu
+//
+//  This program is free software: you can redistribute it and/or modify
+//  it under the terms of the GNU General Public License as published by
+//  the Free Software Foundation, either version 3 of the License, or
+//  (at your option) any later version.
+//
+//  This program is distributed in the hope that it will be useful,
+//  but WITHOUT ANY WARRANTY; without even the implied warranty of
+//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//  GNU General Public License for more details.
+//
+//  You should have received a copy of the GNU General Public License
+//  along with this program.  If not, see <https://www.gnu.org/licenses/>.
+//
+// https://bhaxor.blog.hu/2018/09/26/hangyaszimulaciok
+// https://bhaxor.blog.hu/2018/10/10/myrmecologist
+// 
+
+#ifndef ANTTHREAD_H
+#define ANTTHREAD_H
+
+#include <QThread>
+#include "ant.h"
+
+class AntThread : public QThread
+{
+    Q_OBJECT
+
+public:
+    AntThread(Ants * ants, int ***grids, int width, int height,
+             int delay, int numAnts, int pheromone, int nbrPheromone, 
+             int evaporation, int min, int max, int cellAntMax);
+    
+    ~AntThread();
+    
+    void run();
+    void finish()
+    {
+        running = false;
+    }
+
+    void pause()
+    {
+        paused = !paused;
+    }
+
+    bool isRunnung()
+    {
+        return running;
+    }
+
+private:
+    bool running {true};
+    bool paused {false};
+    Ants* ants;
+    int** numAntsinCells;
+    int min, max;
+    int cellAntMax;
+    int pheromone;
+    int evaporation;
+    int nbrPheromone;
+    int ***grids;
+    int width;
+    int height;
+    int gridIdx;
+    int delay;
+    
+    void timeDevel();
+
+    int newDir(int sor, int oszlop, int vsor, int voszlop);
+    void detDirs(int irany, int& ifrom, int& ito, int& jfrom, int& jto );
+    int moveAnts(int **grid, int row, int col, int& retrow, int& retcol, int);
+    double sumNbhs(int **grid, int row, int col, int);
+    void setPheromone(int **grid, int row, int col);
+
+signals:
+    void step ( const int &);
+
+};
+
+#endif
+
+          
+          ]]>
+        </programlisting>  
+         <para>
+        anthread.cpp:
+        </para>
+         <programlisting language="c++">
+          <![CDATA[   
+          // BHAX Myrmecologist
+//
+// Copyright (C) 2019
+// Norbert BÃ¡tfai, batfai.norbert@inf.unideb.hu
+//
+//  This program is free software: you can redistribute it and/or modify
+//  it under the terms of the GNU General Public License as published by
+//  the Free Software Foundation, either version 3 of the License, or
+//  (at your option) any later version.
+//
+//  This program is distributed in the hope that it will be useful,
+//  but WITHOUT ANY WARRANTY; without even the implied warranty of
+//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//  GNU General Public License for more details.
+//
+//  You should have received a copy of the GNU General Public License
+//  along with this program.  If not, see <https://www.gnu.org/licenses/>.
+//
+// https://bhaxor.blog.hu/2018/09/26/hangyaszimulaciok
+// https://bhaxor.blog.hu/2018/10/10/myrmecologist
+// 
+
+#include "antthread.h"
+#include <QDebug>
+#include <cmath>
+#include <QDateTime>
+
+AntThread::AntThread ( Ants* ants, int*** grids,
+                     int width, int height,
+                     int delay, int numAnts, 
+                     int pheromone, int nbrPheromone, 
+                     int evaporation,
+                     int min, int max, int cellAntMax)
+{
+    this->ants = ants;
+    this->grids = grids;
+    this->width = width;
+    this->height = height;
+    this->delay = delay;
+    this->pheromone = pheromone;
+    this->evaporation = evaporation;
+    this->min = min;
+    this->max = max;
+    this->cellAntMax = cellAntMax;
+    this->nbrPheromone = nbrPheromone;
+
+    numAntsinCells = new int*[height];
+    for ( int i=0; i<height; ++i ) {
+        numAntsinCells[i] = new int [width];
+    }
+
+    for ( int i=0; i<height; ++i )
+        for ( int j=0; j<width; ++j ) {
+            numAntsinCells[i][j] = 0;
+        }
+
+    qsrand ( QDateTime::currentMSecsSinceEpoch() );
+
+    Ant h {0, 0};
+    for ( int i {0}; i<numAnts; ++i ) {
+
+        h.y = height/2 + qrand() % 40-20;
+        h.x = width/2 + qrand() % 40-20;
+
+        ++numAntsinCells[h.y][h.x];
+
+        ants->push_back ( h );
+
+    }
+
+    gridIdx = 0;
+}
+
+double AntThread::sumNbhs ( int **grid, int row, int col, int dir )
+{
+    double sum = 0.0;
+
+    int ifrom, ito;
+    int jfrom, jto;
+
+    detDirs ( dir, ifrom, ito, jfrom, jto );
+
+    for ( int i=ifrom; i<ito; ++i )
+        for ( int j=jfrom; j<jto; ++j )
+
+            if ( ! ( ( i==0 ) && ( j==0 ) ) ) {
+                int o = col + j;
+                if ( o < 0 ) {
+                    o = width-1;
+                } else if ( o >= width ) {
+                    o = 0;
+                }
+
+                int s = row + i;
+                if ( s < 0 ) {
+                    s = height-1;
+                } else if ( s >= height ) {
+                    s = 0;
+                }
+
+                sum += (grid[s][o]+1)*(grid[s][o]+1)*(grid[s][o]+1);
+
+            }
+
+    return sum;
+}
+
+int AntThread::newDir ( int sor, int oszlop, int vsor, int voszlop )
+{
+
+    if ( vsor == 0 && sor == height -1 ) {
+        if ( voszlop < oszlop ) {
+            return 5;
+        } else if ( voszlop > oszlop ) {
+            return 3;
+        } else {
+            return 4;
+        }
+    } else if ( vsor == height - 1 && sor == 0 ) {
+        if ( voszlop < oszlop ) {
+            return 7;
+        } else if ( voszlop > oszlop ) {
+            return 1;
+        } else {
+            return 0;
+        }
+    } else if ( voszlop == 0 && oszlop == width - 1 ) {
+        if ( vsor < sor ) {
+            return 1;
+        } else if ( vsor > sor ) {
+            return 3;
+        } else {
+            return 2;
+        }
+    } else if ( voszlop == width && oszlop == 0 ) {
+        if ( vsor < sor ) {
+            return 7;
+        } else if ( vsor > sor ) {
+            return 5;
+        } else {
+            return 6;
+        }
+    } else if ( vsor < sor && voszlop < oszlop ) {
+        return 7;
+    } else if ( vsor < sor && voszlop == oszlop ) {
+        return 0;
+    } else if ( vsor < sor && voszlop > oszlop ) {
+        return 1;
+    }
+
+    else if ( vsor > sor && voszlop < oszlop ) {
+        return 5;
+    } else if ( vsor > sor && voszlop == oszlop ) {
+        return 4;
+    } else if ( vsor > sor && voszlop > oszlop ) {
+        return 3;
+    }
+
+    else if ( vsor == sor && voszlop < oszlop ) {
+        return 6;
+    } else if ( vsor == sor && voszlop > oszlop ) {
+        return 2;
+    }
+
+    else { //(vsor == sor && voszlop == oszlop)
+        qDebug() << "ZAVAR AZ EROBEN az iranynal";
+
+        return -1;
+    }
+
+}
+
+void AntThread::detDirs ( int dir, int& ifrom, int& ito, int& jfrom, int& jto )
+{
+
+    switch ( dir ) {
+    case 0:
+        ifrom = -1;
+        ito = 0;
+        jfrom = -1;
+        jto = 2;
+        break;
+    case 1:
+        ifrom = -1;
+        ito = 1;
+        jfrom = 0;
+        jto = 2;
+        break;
+    case 2:
+        ifrom = -1;
+        ito = 2;
+        jfrom = 1;
+        jto = 2;
+        break;
+    case 3:
+        ifrom =
+            0;
+        ito = 2;
+        jfrom = 0;
+        jto = 2;
+        break;
+    case 4:
+        ifrom = 1;
+        ito = 2;
+        jfrom = -1;
+        jto = 2;
+        break;
+    case 5:
+        ifrom = 0;
+        ito = 2;
+        jfrom = -1;
+        jto = 1;
+        break;
+    case 6:
+        ifrom = -1;
+        ito = 2;
+        jfrom = -1;
+        jto = 0;
+        break;
+    case 7:
+        ifrom = -1;
+        ito = 1;
+        jfrom = -1;
+        jto = 1;
+        break;
+
+    }
+
+}
+
+int AntThread::moveAnts ( int **racs,
+                           int sor, int oszlop,
+                           int& vsor, int& voszlop, int dir )
+{
+
+    int y = sor;
+    int x = oszlop;
+
+    int ifrom, ito;
+    int jfrom, jto;
+
+    detDirs ( dir, ifrom, ito, jfrom, jto );
+
+    double osszes = sumNbhs ( racs, sor, oszlop, dir );
+    double random = ( double ) ( qrand() %1000000 ) / ( double ) 1000000.0;
+    double gvalseg = 0.0;
+
+
+    for ( int i=ifrom; i<ito; ++i )
+        for ( int j=jfrom; j<jto; ++j )
+            if ( ! ( ( i==0 ) && ( j==0 ) ) )
+            {
+                int o = oszlop + j;
+                if ( o < 0 ) {
+                    o = width-1;
+                } else if ( o >= width ) {
+                    o = 0;
+                }
+
+                int s = sor + i;
+                if ( s < 0 ) {
+                    s = height-1;
+                } else if ( s >= height ) {
+                    s = 0;
+                }
+
+                //double kedvezo = std::sqrt((double)(racs[s][o]+2));//(racs[s][o]+2)*(racs[s][o]+2);
+                //double kedvezo = (racs[s][o]+b)*(racs[s][o]+b);
+                //double kedvezo = ( racs[s][o]+1 );
+                double kedvezo = (racs[s][o]+1)*(racs[s][o]+1)*(racs[s][o]+1);
+
+                double valseg = kedvezo/osszes;
+                gvalseg += valseg;
+
+                if ( gvalseg >= random ) {
+
+                    vsor = s;
+                    voszlop = o;
+
+                    return newDir ( sor, oszlop, vsor, voszlop );
+
+                }
+
+            }
+
+    qDebug() << "ZAVAR AZ EROBEN a lepesnel";
+    vsor = y;
+    voszlop = x;
+
+    return dir;
+}
+
+void AntThread::timeDevel()
+{
+
+    int **racsElotte = grids[gridIdx];
+    int **racsUtana = grids[ ( gridIdx+1 ) %2];
+
+    for ( int i=0; i<height; ++i )
+        for ( int j=0; j<width; ++j ) 
+        {
+            racsUtana[i][j] = racsElotte[i][j];
+
+            if ( racsUtana[i][j] - evaporation >= 0 ) {
+                racsUtana[i][j] -= evaporation;
+            } else {
+                racsUtana[i][j] = 0;
+            }
+
+        }
+
+    for ( Ant &h: *ants ) 
+    {
+
+        int sor {-1}, oszlop {-1};
+        int ujirany = moveAnts( racsElotte, h.y, h.x, sor, oszlop, h.dir );
+
+        setPheromone ( racsUtana, h.y, h.x );
+
+        if ( numAntsinCells[sor][oszlop] <cellAntMax ) {
+
+            --numAntsinCells[h.y][h.x];
+            ++numAntsinCells[sor][oszlop];
+
+            h.x = oszlop;
+            h.y = sor;
+            h.dir = ujirany;
+            
+        }
+    }
+
+    gridIdx = ( gridIdx+1 ) %2;
+}
+
+
+
+void AntThread::setPheromone ( int **racs,
+                         int sor, int oszlop )
+{
+
+    for ( int i=-1; i<2; ++i )
+        for ( int j=-1; j<2; ++j )    
+            if ( ! ( ( i==0 ) && ( j==0 ) ) ) 
+            {
+                int o = oszlop + j;
+                {
+                    if ( o < 0 ) {
+                        o = width-1;
+                    } else if ( o >= width ) {
+                        o = 0;
+                    }
+                }
+                int s = sor + i;
+                {
+                    if ( s < 0 ) {
+                        s = height-1;
+                    } else if ( s >= height ) {
+                        s = 0;
+                    }
+                }
+
+                if ( racs[s][o] + nbrPheromone <= max ) {
+                    racs[s][o] += nbrPheromone;
+                } else {
+                    racs[s][o] = max;
+                }
+
+
+            }
+
+    if ( racs[sor][oszlop] + pheromone <= max ) {
+        racs[sor][oszlop] += pheromone;
+    } else {
+        racs[sor][oszlop]  = max;
+    }
+
+}
+
+void AntThread::run()
+{
+    running = true;
+    while ( running ) {
+
+        QThread::msleep ( delay );
+
+        if ( !paused ) {
+            timeDevel();
+        }
+
+        emit step ( gridIdx );
+
+    }
+
+}
+
+AntThread::~AntThread()
+{
+    for ( int i=0; i<height; ++i ) {
+        delete [] numAntsinCells[i];
+    }
+
+    delete [] numAntsinCells;
+}
+
+
+          
+          
+          ]]>
+        </programlisting>  
+         <para>
+        ant.h:
+        </para>
+         <programlisting language="c++">
+          <![CDATA[  
+          // BHAX Myrmecologist
+//
+// Copyright (C) 2019
+// Norbert BÃ¡tfai, batfai.norbert@inf.unideb.hu
+//
+//  This program is free software: you can redistribute it and/or modify
+//  it under the terms of the GNU General Public License as published by
+//  the Free Software Foundation, either version 3 of the License, or
+//  (at your option) any later version.
+//
+//  This program is distributed in the hope that it will be useful,
+//  but WITHOUT ANY WARRANTY; without even the implied warranty of
+//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//  GNU General Public License for more details.
+//
+//  You should have received a copy of the GNU General Public License
+//  along with this program.  If not, see <https://www.gnu.org/licenses/>.
+//
+// https://bhaxor.blog.hu/2018/09/26/hangyaszimulaciok
+// https://bhaxor.blog.hu/2018/10/10/myrmecologist
+// 
+
+#ifndef ANT_H
+#define ANT_H
+
+class Ant
+{
+
+public:
+    int x;
+    int y;
+    int dir;
+
+    Ant(int x, int y): x(x), y(y) {
+        
+        dir = qrand() % 8;
+        
+    }
+
+};
+
+typedef std::vector<Ant> Ants;
+
+#endif
+ 
+          
+          ]]>
+        </programlisting>  
+        
+        <para>
+            Megoldás videó: <link xlink:href="https://bhaxor.blog.hu/2018/10/10/myrmecologist">https://bhaxor.blog.hu/2018/10/10/myrmecologist</link>
+        </para>
+        <para>
+            Megoldás forrása: <link xlink:href=""></link>               
+        </para>
+        <para>
+            Tanulságok, tapasztalatok, magyarázat...
+        </para>  
+               
+        <figure>
+            <title>Hangyaszimuláció UML diagram</title>
+            <mediaobject>
+                <imageobject>
+                    <imagedata fileref="Conway/hangyuml.png" scale="50" />
+                </imageobject>
+                <textobject>
+                    <phrase>Hangyaszimuláció UML diagram</phrase>
+                </textobject>
+            </mediaobject>
+        </figure>  
+        <para>
+        A program alapját a hangyák mozgásának és tájékozódásának a folyamata adja.
+         Amikor a hangyák élelem után kutatnak feromonokat bocsátanak ki és ez által tudnak tájékozódni. 
+        </para>
+        <para>
+        Az ant.h reprezentálja a hangyáinkat melyeket az antthread fog létre hozni és bele pakolni egy ant* típusu változóba.
+         A hangyák létre hozásánál kapnak egy irányt  és egy pozíciót. És ezek után a hangyák az anthread irányítására lesznek bízva ő agya meg hogy hova 
+         kell lépniük és hogy mi lesz a következő irányuk. Az irányokra azért van szükség, hogy ne forduljanak hátra a hangyák és így ne menjenek vissza a saját nyom vonalukon. 
+          A Mind ezek melet a feromonok elhelyezését és gyengítését is az antthread végzi a grids-eken. Az antwin az antthread által elő állatot adatokből elkészíti a  látni 
+          kívánt képet amit a main-ben rakunk ki a képernyőre. A main nem anyira  letisztult mint amit meg szokhatunk egy 
+        Qt programtól de ez a pár sor kód csak a rra szolgál, hogy képesek legyünk megadni pár paramétert a program inditásakor.
+        </para>
+            </section>        
+    <section>
+        <title>Java életjáték</title>
+        <para>
+            Írd meg Java-ban a John Horton Conway-féle életjátékot, 
+            valósítsa meg a sikló-kilövőt!
+        </para>
+        <para>
+            Megoldás videó: 
+        </para>
+        <para>
+            Megoldás forrása: <link xlink:href=""></link>               
+        </para>
+        <para>
+            Tanulságok, tapasztalatok, magyarázat...
+        </para>            
+    </section>        
+    <section>
+        <title>Qt C++ életjáték</title>
+        <para>
+            Most Qt C++-ban!
+        </para>
+        <para>
+            Megoldás videó: 
+        </para>
+        <para>
+            Megoldás forrása: <link xlink:href=""></link>               
+        </para>
+        <para>
+        main.cpp:
+        </para>
+                 <programlisting language="c++">
+          <![CDATA[  #include <QApplication>
+#include "sejtablak.h"
+#include <QDesktopWidget>
+
+int main(int argc, char *argv[])
+{
+  QApplication a(argc, argv);
+  SejtAblak w(100, 75);
+  w.show();
+  
+  return a.exec();
+}
+]]>
+        </programlisting>  
+<para>
+sejtablak.h
+</para>
+<programlisting language="c++">
+          <![CDATA[  #ifndef SEJTABLAK_H
+#define SEJTABLAK_H
+
+#include <QMainWindow>
+#include <QPainter>
+#include "sejtszal.h"
+
+class SejtSzal;
+
+class SejtAblak : public QMainWindow
+{
+  Q_OBJECT
+  
+public:
+  SejtAblak(int szelesseg = 100, int magassag = 75, QWidget *parent = 0);
+  ~SejtAblak();
+  // Egy sejt lehet élõ
+  static const bool ELO = true;
+  // vagy halott
+  static const bool HALOTT = false;
+  void vissza(int racsIndex);
+  
+protected:
+  // Két rácsot használunk majd, az egyik a sejttér állapotát
+  // a t_n, a másik a t_n+1 idõpillanatban jellemzi.
+  bool ***racsok;
+  // Valamelyik rácsra mutat, technikai jellegû, hogy ne kelljen a
+  // [2][][]-ból az elsõ dimenziót használni, mert vagy az egyikre
+  // állítjuk, vagy a másikra.
+  bool **racs;
+  // Megmutatja melyik rács az aktuális: [rácsIndex][][]
+  int racsIndex;
+  // Pixelben egy cella adatai.
+  int cellaSzelesseg;
+  int cellaMagassag;
+  // A sejttér nagysága, azaz hányszor hány cella van?
+  int szelesseg;
+  int magassag;    
+  void paintEvent(QPaintEvent*);
+  void siklo(bool **racs, int x, int y);
+  void sikloKilovo(bool **racs, int x, int y);
+  
+private:
+  SejtSzal* eletjatek;
+  
+};
+
+#endif // SEJTABLAK_H
+
+]]>
+</programlisting>  
+<para>
+sejtablak.cpp
+</para>
+<programlisting language="c++">
+          <![CDATA[  // sejtablak.cpp
+//
+// Életjáték rajzoló
+// Programozó Páternoszter
+//
+// Copyright (C) 2011, Bátfai Norbert, nbatfai@inf.unideb.hu, nbatfai@gmail.com
+//
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with this program.  If not, see <http://www.gnu.org/licenses/>.
+//
+// Ez a program szabad szoftver; terjeszthetõ illetve módosítható a
+// Free Software Foundation által kiadott GNU General Public License
+// dokumentumában leírtak; akár a licenc 3-as, akár (tetszõleges) késõbbi
+// változata szerint.
+//
+// Ez a program abban a reményben kerül közreadásra, hogy hasznos lesz,
+// de minden egyéb GARANCIA NÉLKÜL, az ELADHATÓSÁGRA vagy VALAMELY CÉLRA
+// VALÓ ALKALMAZHATÓSÁGRA való származtatott garanciát is beleértve.
+// További részleteket a GNU General Public License tartalmaz.
+//
+// A felhasználónak a programmal együtt meg kell kapnia a GNU General
+// Public License egy példányát; ha mégsem kapta meg, akkor
+// tekintse meg a <http://www.gnu.org/licenses/> oldalon.
+//
+//
+// Version history:
+//
+// 0.0.1    A két osztály tervezésének fõ szempontja az volt, hogy
+// ne vagy alig különbözzön az elsõ C++-os példától, a Mandelostól:
+// http://progpater.blog.hu/2011/02/26/tan_csodallak_amde_nem_ertelek_de_kepzetem_hegyvolgyedet_bejarja
+// ezért az olyan kényesebb dolgokkal, hogy kezeljük a racsIndex-et a
+// két osztályra bontott C++ megoldásban, amikor írjuk át a Javásból, nem foglalkoztunk
+// a kiinduló Javás: http://www.tankonyvtar.hu/informatika/javat-tanitok-1-2-080904-1
+// (a bazár eszme: Release Early, Release Often" írjuk ki a posztra)
+//
+
+#include "sejtablak.h"
+
+SejtAblak::SejtAblak(int szelesseg, int magassag, QWidget *parent)
+: QMainWindow(parent)
+{
+  setWindowTitle("A John Horton Conway-féle életjáték");
+  
+  this->magassag = magassag;
+  this->szelesseg = szelesseg;
+
+  
+  cellaSzelesseg = 6;
+  cellaMagassag = 6;
+
+  setFixedSize(QSize(szelesseg*cellaSzelesseg, magassag*cellaMagassag));
+  
+  racsok = new bool**[2];
+  racsok[0] = new bool*[magassag];
+  for(int i=0; i<magassag; ++i)
+    racsok[0][i] = new bool [szelesseg];
+  racsok[1] = new bool*[magassag];
+  for(int i=0; i<magassag; ++i)
+    racsok[1][i] = new bool [szelesseg];
+
+  racsIndex = 0;
+  racs = racsok[racsIndex];
+
+  // A kiinduló racs minden cellája HALOTT
+  for(int i=0; i<magassag; ++i)
+    for(int j=0; j<szelesseg; ++j)
+      racs[i][j] = HALOTT;
+    // A kiinduló racsra "ELOlényeket" helyezünk
+    //siklo(racs, 2, 2);
+
+    sikloKilovo(racs, 5, 60);
+
+  eletjatek = new SejtSzal(racsok, szelesseg, magassag, 120, this);
+
+  eletjatek->start();
+  
+}
+
+void SejtAblak::paintEvent(QPaintEvent*) {
+  QPainter qpainter(this);
+  
+  // Az aktuális
+  bool **racs = racsok[racsIndex];
+  // racsot rajzoljuk ki:
+  for(int i=0; i<magassag; ++i) { // végig lépked a sorokon
+    for(int j=0; j<szelesseg; ++j) { // s az oszlopok
+      // Sejt cella kirajzolása
+      if(racs[i][j] == ELO)
+	qpainter.fillRect(j*cellaSzelesseg, i*cellaMagassag,
+			  cellaSzelesseg, cellaMagassag, Qt::black);
+	else
+	  qpainter.fillRect(j*cellaSzelesseg, i*cellaMagassag,
+			    cellaSzelesseg, cellaMagassag, Qt::white);
+	  qpainter.setPen(QPen(Qt::gray, 1));
+	
+	qpainter.drawRect(j*cellaSzelesseg, i*cellaMagassag,
+			  cellaSzelesseg, cellaMagassag);
+    }
+  }
+  
+  qpainter.end();
+}
+
+
+SejtAblak::~SejtAblak()
+{
+  delete eletjatek;
+  
+  for(int i=0; i<magassag; ++i) {
+    delete[] racsok[0][i];
+    delete[] racsok[1][i];
+  }
+  
+  delete[] racsok[0];
+  delete[] racsok[1];
+  delete[] racsok;
+  
+  
+}
+
+void SejtAblak::vissza(int racsIndex)
+{
+  this->racsIndex = racsIndex;
+  update();
+}
+
+/**
+ * A sejttérbe "ELOlényeket" helyezünk, ez a "sikló".
+ * Adott irányban halad, másolja magát a sejttérben.
+ * Az ELOlény ismertetését lásd például a
+ * [MATEK JÁTÉK] hivatkozásban (Csákány Béla: Diszkrét
+ * matematikai játékok. Polygon, Szeged 1998. 172. oldal.)
+ *
+ * @param   racs    a sejttér ahová ezt az állatkát helyezzük
+ * @param   x       a befoglaló tégla bal felsõ sarkának oszlopa
+ * @param   y       a befoglaló tégla bal felsõ sarkának sora
+ */
+void SejtAblak::siklo(bool **racs, int x, int y) {
+  
+  racs[y+ 0][x+ 2] = ELO;
+  racs[y+ 1][x+ 1] = ELO;
+  racs[y+ 2][x+ 1] = ELO;
+  racs[y+ 2][x+ 2] = ELO;
+  racs[y+ 2][x+ 3] = ELO;
+  
+}
+/**
+ * A sejttérbe "ELOlényeket" helyezünk, ez a "sikló ágyú".
+ * Adott irányban siklókat lõ ki.
+ * Az ELOlény ismertetését lásd például a
+ * [MATEK JÁTÉK] hivatkozásban /Csákány Béla: Diszkrét
+ * matematikai játékok. Polygon, Szeged 1998. 173. oldal./,
+ * de itt az ábra hibás, egy oszloppal told még balra a
+ * bal oldali 4 sejtes négyzetet. A helyes ágyú rajzát
+ * lásd pl. az [ÉLET CIKK] hivatkozásban /Robert T.
+ * Wainwright: Life is Universal./ (Megemlíthetjük, hogy
+ * mindkettõ tartalmaz két felesleges sejtet is.)
+ *
+ * @param   racs    a sejttér ahová ezt az állatkát helyezzük
+ * @param   x       a befoglaló tégla bal felsõ sarkának oszlopa
+ * @param   y       a befoglaló tégla bal felsõ sarkának sora
+ */
+void SejtAblak::sikloKilovo(bool **racs, int x, int y) {
+  
+  racs[y+ 6][x+ 0] = ELO;
+  racs[y+ 6][x+ 1] = ELO;
+  racs[y+ 7][x+ 0] = ELO;
+  racs[y+ 7][x+ 1] = ELO;
+  
+  racs[y+ 3][x+ 13] = ELO;
+  
+  racs[y+ 4][x+ 12] = ELO;
+  racs[y+ 4][x+ 14] = ELO;
+  
+  racs[y+ 5][x+ 11] = ELO;
+  racs[y+ 5][x+ 15] = ELO;
+  racs[y+ 5][x+ 16] = ELO;
+  racs[y+ 5][x+ 25] = ELO;
+  
+  racs[y+ 6][x+ 11] = ELO;
+  racs[y+ 6][x+ 15] = ELO;
+  racs[y+ 6][x+ 16] = ELO;
+  racs[y+ 6][x+ 22] = ELO;
+  racs[y+ 6][x+ 23] = ELO;
+  racs[y+ 6][x+ 24] = ELO;
+  racs[y+ 6][x+ 25] = ELO;
+  
+  racs[y+ 7][x+ 11] = ELO;
+  racs[y+ 7][x+ 15] = ELO;
+  racs[y+ 7][x+ 16] = ELO;
+  racs[y+ 7][x+ 21] = ELO;
+  racs[y+ 7][x+ 22] = ELO;
+  racs[y+ 7][x+ 23] = ELO;
+  racs[y+ 7][x+ 24] = ELO;
+  
+  racs[y+ 8][x+ 12] = ELO;
+  racs[y+ 8][x+ 14] = ELO;
+  racs[y+ 8][x+ 21] = ELO;
+  racs[y+ 8][x+ 24] = ELO;
+  racs[y+ 8][x+ 34] = ELO;
+  racs[y+ 8][x+ 35] = ELO;
+  
+  racs[y+ 9][x+ 13] = ELO;
+  racs[y+ 9][x+ 21] = ELO;
+  racs[y+ 9][x+ 22] = ELO;
+  racs[y+ 9][x+ 23] = ELO;
+  racs[y+ 9][x+ 24] = ELO;
+  racs[y+ 9][x+ 34] = ELO;
+  racs[y+ 9][x+ 35] = ELO;
+  
+  racs[y+ 10][x+ 22] = ELO;
+  racs[y+ 10][x+ 23] = ELO;
+  racs[y+ 10][x+ 24] = ELO;
+  racs[y+ 10][x+ 25] = ELO;
+  
+  racs[y+ 11][x+ 25] = ELO;
+  
+}
+
+]]>
+</programlisting>  
+<para>
+sejtszal.h
+</para>
+<programlisting language="c++">
+          <![CDATA[  #ifndef SEJTSZAL_H
+#define SEJTSZAL_H
+
+#include <QThread>
+#include "sejtablak.h"
+
+class SejtAblak;
+
+class SejtSzal : public QThread
+{
+    Q_OBJECT
+
+public:
+    SejtSzal(bool ***racsok, int szelesseg, int magassag,
+             int varakozas, SejtAblak *sejtAblak);
+    ~SejtSzal();
+    void run();
+
+protected:
+    bool ***racsok;
+    int szelesseg, magassag;
+    // Megmutatja melyik rács az aktuális: [rácsIndex][][]
+    int racsIndex;
+    // A sejttér két egymást követõ t_n és t_n+1 diszkrét idõpillanata
+    // közötti valós idõ.
+    int varakozas;
+    void idoFejlodes();
+    int szomszedokSzama(bool **racs,
+                        int sor, int oszlop, bool allapot);
+    SejtAblak* sejtAblak;
+
+};
+
+#endif // SEJTSZAL_H
+
+]]>
+</programlisting>  
+<para>
+sejtszal.cpp
+</para>
+<programlisting language="c++">
+          <![CDATA[  // sejtszal.cpp
+//
+// Életjáték rajzoló
+// Programozó Páternoszter
+//
+// Copyright (C) 2011, Bátfai Norbert, nbatfai@inf.unideb.hu, nbatfai@gmail.com
+//
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with this program.  If not, see <http://www.gnu.org/licenses/>.
+//
+// Ez a program szabad szoftver; terjeszthetõ illetve módosítható a
+// Free Software Foundation által kiadott GNU General Public License
+// dokumentumában leírtak; akár a licenc 3-as, akár (tetszõleges) késõbbi
+// változata szerint.
+//
+// Ez a program abban a reményben kerül közreadásra, hogy hasznos lesz,
+// de minden egyéb GARANCIA NÉLKÜL, az ELADHATÓSÁGRA vagy VALAMELY CÉLRA
+// VALÓ ALKALMAZHATÓSÁGRA való származtatott garanciát is beleértve.
+// További részleteket a GNU General Public License tartalmaz.
+//
+// A felhasználónak a programmal együtt meg kell kapnia a GNU General
+// Public License egy példányát; ha mégsem kapta meg, akkor
+// tekintse meg a <http://www.gnu.org/licenses/> oldalon.
+//
+//
+// Version history:
+//
+// 0.0.1    A két osztály tervezésének fõ szempontja az volt, hogy
+// ne vagy alig különbözzön az elsõ C++-os példától, a Mandelostól:
+// http://progpater.blog.hu/2011/02/26/tan_csodallak_amde_nem_ertelek_de_kepzetem_hegyvolgyedet_bejarja
+// ezért az olyan kényesebb dolgokkal, hogy kezeljük a racsIndex-et a
+// két osztályra bontott C++ megoldásban, amikor írjuk át a Javásból, nem foglalkoztunk
+// a kiinduló Javás: http://www.tankonyvtar.hu/informatika/javat-tanitok-1-2-080904-1
+// (a bazár eszme: Release Early, Release Often" írjuk ki a posztra)
+//
+
+#include "sejtszal.h"
+
+SejtSzal::SejtSzal(bool ***racsok, int szelesseg, int magassag, int varakozas, SejtAblak *sejtAblak)
+{
+    this->racsok = racsok;
+    this->szelesseg = szelesseg;
+    this->magassag = magassag;
+    this->varakozas = varakozas;
+    this->sejtAblak = sejtAblak;
+
+    racsIndex = 0;
+}
+
+/**
+   * Az kérdezett állapotban lévõ nyolcszomszédok száma.
+   *
+   * @param   rács    a sejttér rács
+   * @param   sor     a rács vizsgált sora
+   * @param   oszlop  a rács vizsgált oszlopa
+   * @param   állapor a nyolcszomszédok vizsgált állapota
+   * @return int a kérdezett állapotbeli nyolcszomszédok száma.
+   */
+int SejtSzal::szomszedokSzama(bool **racs,
+                              int sor, int oszlop, bool allapot) {
+    int allapotuSzomszed = 0;
+    // A nyolcszomszédok végigzongorázása:
+    for(int i=-1; i<2; ++i)
+        for(int j=-1; j<2; ++j)
+            // A vizsgált sejtet magát kihagyva:
+            if(!((i==0) && (j==0))) {
+        // A sejttérbõl szélének szomszédai
+        // a szembe oldalakon ("periódikus határfeltétel")
+        int o = oszlop + j;
+        if(o < 0)
+            o = szelesseg-1;
+        else if(o >= szelesseg)
+            o = 0;
+
+        int s = sor + i;
+        if(s < 0)
+            s = magassag-1;
+        else if(s >= magassag)
+            s = 0;
+
+        if(racs[s][o] == allapot)
+            ++allapotuSzomszed;
+    }
+
+    return allapotuSzomszed;
+}
+
+/**
+ * A sejttér idõbeli fejlõdése a John H. Conway féle
+ * életjáték sejtautomata szabályai alapján történik.
+ * A szabályok részletes ismertetését lásd például a
+ * [MATEK JÁTÉK] hivatkozásban (Csákány Béla: Diszkrét
+ * matematikai játékok. Polygon, Szeged 1998. 171. oldal.)
+ */
+void SejtSzal::idoFejlodes() {
+
+    bool **racsElotte = racsok[racsIndex];
+    bool **racsUtana = racsok[(racsIndex+1)%2];
+
+    for(int i=0; i<magassag; ++i) { // sorok
+        for(int j=0; j<szelesseg; ++j) { // oszlopok
+
+            int elok = szomszedokSzama(racsElotte, i, j, SejtAblak::ELO);
+
+            if(racsElotte[i][j] == SejtAblak::ELO) {
+                /* Élõ élõ marad, ha kettõ vagy három élõ
+             szomszedja van, különben halott lesz. */
+                if(elok==2 || elok==3)
+                    racsUtana[i][j] = SejtAblak::ELO;
+                else
+                    racsUtana[i][j] = SejtAblak::HALOTT;
+            }  else {
+                /* Halott halott marad, ha három élõ
+             szomszedja van, különben élõ lesz. */
+                if(elok==3)
+                    racsUtana[i][j] = SejtAblak::ELO;
+                else
+                    racsUtana[i][j] = SejtAblak::HALOTT;
+            }
+        }
+    }
+    racsIndex = (racsIndex+1)%2;
+}
+
+
+/** A sejttér idõbeli fejlõdése. */
+void SejtSzal::run()
+{
+    while(true) {
+        QThread::msleep(varakozas);
+        idoFejlodes();
+        sejtAblak->vissza(racsIndex);
+    }
+
+}
+
+SejtSzal::~SejtSzal()
+{
+}
+
+]]>
+        </programlisting>  
+        <para>
+            A szabájokról pár szó :
+        </para>
+            <para> Élõ sejt élõ marad(feketeként jelenikmeg), ha kettõ vagy három élõ
+             szomszedja van, különben halott lesz.
+</para>
+<para>
+  Halott sejt halott marad, ha három élõ
+             szomszedja van, különben élõ lesz. 
+
+        </para>  
+<para>
+A működéséről párszó:
+</para>          
+<para>
+A main ahogy eddig minden Qt programban a megjelenítésért felel a sejtablakban
+ készítjük  el a rácsot amin mozoghatnak  a sejtek és magét a képet is a rácsról
+  ezek mellet el helyez egy  „sikló kilövőt” is a rácson ami folyamatosan fogja 
+  nekünk generálni a siklókat 
+de ehez szükség van a sejtszalra ami alkalmazza a fentebb már említett szabályokat.
+</para>
+    </section>        
+    <section>
+        <title>BrainB Benchmark</title>
+        <para>
+        </para>
+        <para>
+            Megoldás videó: 
+        </para>
+        <para>main.cpp
+        </para>
+        <programlisting language="c++">
+        
+          <![CDATA[ /**
+ * @brief Benchmarking Cognitive Abilities of the Brain with Computer Games
+ *
+ * @file main.cpp
+ * @author  Norbert Bátfai <nbatfai@gmail.com>
+ * @version 6.0.1
+ *
+ * @section LICENSE
+ *
+ * Copyright (C) 2017, 2018 Norbert Bátfai, nbatfai@gmail.com
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @section DESCRIPTION
+ *
+ */
+
+#include <QApplication>
+#include <QTextStream>
+#include <QtWidgets>
+#include "BrainBWin.h"
+
+int main ( int argc, char **argv )
+{
+        QApplication app ( argc, argv );
+
+        QTextStream qout ( stdout );
+        qout.setCodec ( "UTF-8" );
+
+        qout << "\n" << BrainBWin::appName << QString::fromUtf8 ( " Copyright (C) 2017, 2018 Norbert Bátfai" ) << endl;
+
+        qout << "This program is free software: you can redistribute it and/or modify it under" << endl;
+        qout << "the terms of the GNU General Public License as published by the Free Software" << endl;
+        qout << "Foundation, either version 3 of the License, or (at your option) any later" << endl;
+        qout << "version.\n" << endl;
+
+        qout << "This program is distributed in the hope that it will be useful, but WITHOUT" << endl;
+        qout << "ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS" << endl;
+        qout << "FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.\n" << endl;
+
+        qout << QString::fromUtf8 ( "Ez a program szabad szoftver; terjeszthető illetve módosítható a Free Software" ) << endl;
+        qout << QString::fromUtf8 ( "Foundation által kiadott GNU General Public License dokumentumában leírtak;" ) << endl;
+        qout << QString::fromUtf8 ( "akár a licenc 3-as, akár (tetszőleges) későbbi változata szerint.\n" ) << endl;
+
+        qout << QString::fromUtf8 ( "Ez a program abban a reményben kerül közreadásra, hogy hasznos lesz, de minden" ) << endl;
+        qout << QString::fromUtf8 ( "egyéb GARANCIA NÉLKÜL, az ELADHATÓSÁGRA vagy VALAMELY CÉLRA VALÓ" ) << endl;
+        qout << QString::fromUtf8 ( "ALKALMAZHATÓSÁGRA való származtatott garanciát is beleértve. További" ) << endl;
+        qout << QString::fromUtf8 ( "részleteket a GNU General Public License tartalmaz.\n" ) << endl;
+
+        qout << "http://gnu.hu/gplv3.html" << endl;
+
+        QRect rect = QApplication::desktop()->availableGeometry();
+        BrainBWin brainBWin ( rect.width(), rect.height() );
+        brainBWin.setWindowState ( brainBWin.windowState() ^ Qt::WindowFullScreen );
+        brainBWin.show();
+        return app.exec();
+}
+
+
+]]>
+        </programlisting>  
+        <para>BrainBWin.h
+        </para>
+        <programlisting language="c++">
+        
+          <![CDATA[  #ifndef BrainBWin_H
+#define BrainBWin_H
+
+/**
+ * @brief Benchmarking Cognitive Abilities of the Brain with Computer Games
+ *
+ * @file BrainBWin.h
+ * @author  Norbert Bátfai <nbatfai@gmail.com>
+ * @version 6.0.1
+ *
+ * @section LICENSE
+ *
+ * Copyright (C) 2017, 2018 Norbert Bátfai, nbatfai@gmail.com
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @section DESCRIPTION
+ *
+ */
+
+#include <QKeyEvent>
+#include <QMainWindow>
+#include <QPixmap>
+#include <QPainter>
+#include <QFont>
+#include <QFile>
+#include <QString>
+#include <QCloseEvent>
+#include <QDate>
+#include <QDir>
+#include <QDateTime>
+#include "BrainBThread.h"
+
+enum playerstate {
+    lost,
+    found
+};
+
+class BrainBWin : public QMainWindow
+{
+    Q_OBJECT
+
+    BrainBThread *brainBThread;
+    QPixmap pixmap;
+    Heroes *heroes;
+
+    int mouse_x;
+    int mouse_y;
+    int yshift {50};
+    int nofLost {0};
+    int nofFound {0};
+
+    int xs, ys;
+
+    bool firstLost {false};
+    bool start {false};
+    playerstate state = lost;
+    std::vector<int> lost2found;
+    std::vector<int> found2lost;
+
+    QString statDir;
+
+public:
+    static const QString appName;
+    static const QString appVersion;
+    BrainBWin ( int w = 256, int h = 256, QWidget *parent = 0 );
+
+    void closeEvent ( QCloseEvent *e ) {
+
+        if ( save ( brainBThread->getT() ) ) {
+            brainBThread->finish();
+            e->accept();
+        } else {
+            e->ignore();
+        }
+
+    }
+
+    virtual ~BrainBWin();
+    void paintEvent ( QPaintEvent * );
+    void keyPressEvent ( QKeyEvent *event );
+    void mouseMoveEvent ( QMouseEvent *event );
+    void mousePressEvent ( QMouseEvent *event );
+    void mouseReleaseEvent ( QMouseEvent *event );
+
+    double mean ( std::vector<int> vect ) {
+
+        if ( vect.size() > 0 ) {
+            double sum = std::accumulate ( vect.begin (), vect.end (), 0.0 );
+            return  sum / vect.size();
+        } else {
+            return 0.0;
+        }
+    }
+
+    double var ( std::vector<int> vect, double mean ) {
+
+        if ( vect.size() > 1 ) {
+
+            double accum = 0.0;
+
+            std::for_each ( vect.begin (), vect.end (), [&] ( const double d ) {
+                accum += ( d - mean ) * ( d - mean );
+            } );
+
+            return sqrt ( accum / ( vect.size()-1 ) );
+        } else {
+            return 0.0;
+        }
+
+    }
+
+    void millis2minsec ( int millis, int &min, int &sec ) {
+
+        sec = ( millis * 100 ) / 1000;
+        min = sec / 60;
+        sec = sec - min * 60;
+
+    }
+
+    bool save ( int t ) {
+
+        bool ret = false;
+
+        if ( !QDir ( statDir ).exists() )
+            if ( !QDir().mkdir ( statDir ) ) {
+                return false;
+            }
+
+        QString name = statDir + "/Test-" + QString::number ( t );
+        QFile file ( name + "-screenimage.png" );
+        if ( file.open ( QIODevice::WriteOnly ) ) {
+            ret = pixmap.save ( &file, "PNG" );
+        }
+
+        QFile tfile ( name + "-stats.txt" );
+        ret = tfile.open ( QIODevice::WriteOnly | QIODevice::Text );
+        if ( ret ) {
+            QTextStream textStremam ( &tfile );
+
+            textStremam << appName + " " + appVersion << "\n";
+            textStremam << "time      : " <<  brainBThread->getT() << "\n";
+            textStremam << "bps       : " <<  brainBThread->get_bps() << "\n";
+            textStremam << "noc       : " <<  brainBThread->nofHeroes() << "\n";
+            textStremam << "nop       : " <<  brainBThread->get_nofPaused() << "\n";
+
+            textStremam << "lost      : "  << "\n";
+            std::vector<int> l = brainBThread->lostV();
+            for ( int n : l ) {
+                textStremam << n << ' ';
+            }
+            textStremam <<  "\n";
+            int m = mean ( l );
+            textStremam << "mean      : " <<  m << "\n";
+            textStremam << "var       : " <<  var ( l, m ) << "\n";
+
+            textStremam << "found     : " ;
+            std::vector<int> f = brainBThread->foundV();
+            for ( int n : f ) {
+                textStremam << n << ' ';
+            }
+            textStremam <<  "\n";
+            m = mean ( f );
+            textStremam << "mean      : " <<  m << "\n";
+            textStremam << "var       : " <<  var ( f, m ) << "\n";
+
+            textStremam << "lost2found: "  ;
+            for ( int n : lost2found ) {
+                textStremam << n << ' ';
+            }
+            textStremam <<  "\n";
+            int m1 = m = mean ( lost2found );
+            textStremam << "mean      : " <<  m << "\n";
+            textStremam << "var       : " <<  var ( lost2found, m ) << "\n";
+
+            textStremam << "found2lost: "  ;
+            for ( int n : found2lost ) {
+                textStremam << n << ' ';
+            }
+            textStremam <<  "\n";
+            int m2 = m = mean ( found2lost );
+            textStremam << "mean      : " <<  m << "\n";
+            textStremam << "var       : " <<  var ( found2lost, m ) << "\n";
+
+            if ( m1 < m2 ) {
+                textStremam << "mean(lost2found) < mean(found2lost)" << "\n";
+            }
+
+            int min, sec;
+            millis2minsec ( t, min, sec );
+            textStremam << "time      : " <<  min  << ":"  << sec << "\n";
+
+            double res = ( ( ( ( double ) m1+ ( double ) m2 ) /2.0 ) /8.0 ) /1024.0;
+            textStremam << "U R about " << res << " Kilobytes\n";
+
+            tfile.close();
+        }
+        return ret;
+    }
+
+public slots :
+
+    void updateHeroes ( const QImage &image, const int &x, const int &y );
+    //void stats ( const int &t );
+    void endAndStats ( const int &t );
+};
+
+#endif // BrainBWin
+]]>
+        </programlisting>  
+        <para>BrainBWin.cpp
+        </para>
+        <programlisting language="c++">
+        
+          <![CDATA[  /**
+ * @brief Benchmarking Cognitive Abilities of the Brain with Computer Games
+ *
+ * @file BrainBWin.cpp
+ * @author  Norbert Bátfai <nbatfai@gmail.com>
+ * @version 6.0.1
+ *
+ * @section LICENSE
+ *
+ * Copyright (C) 2017, 2018 Norbert Bátfai, nbatfai@gmail.com
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @section DESCRIPTION
+ *
+ */
+
+#include "BrainBWin.h"
+
+const QString BrainBWin::appName = "NEMESPOR BrainB Test";
+const QString BrainBWin::appVersion = "6.0.3";
+
+BrainBWin::BrainBWin ( int w, int h, QWidget *parent ) : QMainWindow ( parent )
+{
+
+//    setWindowTitle(appName + " " + appVersion);
+//    setFixedSize(QSize(w, h));
+
+        statDir = appName + " " + appVersion + " - " + QDate::currentDate().toString() + QString::number ( QDateTime::currentMSecsSinceEpoch() );
+
+        brainBThread = new BrainBThread ( w, h - yshift );
+        brainBThread->start();
+
+        connect ( brainBThread, SIGNAL ( heroesChanged ( QImage, int, int ) ),
+                  this, SLOT ( updateHeroes ( QImage, int, int ) ) );
+
+        connect ( brainBThread, SIGNAL ( endAndStats ( int ) ),
+                  this, SLOT ( endAndStats ( int ) ) );
+
+}
+
+void BrainBWin::endAndStats ( const int &t )
+{
+
+        qDebug()  << "\n\n\n";
+        qDebug()  << "Thank you for using " + appName;
+        qDebug()  << "The result can be found in the directory " + statDir;
+        qDebug()  << "\n\n\n";
+
+        save ( t );
+        close();
+}
+
+void BrainBWin::updateHeroes ( const QImage &image, const int &x, const int &y )
+{
+
+        if ( start && !brainBThread->get_paused() ) {
+
+                int dist = ( this->mouse_x - x ) * ( this->mouse_x - x ) + ( this->mouse_y - y ) * ( this->mouse_y - y );
+
+                if ( dist > 121 ) {
+                        ++nofLost;
+                        nofFound = 0;
+                        if ( nofLost > 12 ) {
+
+                                if ( state == found && firstLost ) {
+                                        found2lost.push_back ( brainBThread->get_bps() );
+                                }
+
+                                firstLost = true;
+
+                                state = lost;
+                                nofLost = 0;
+                                //qDebug() << "LOST";
+                                //double mean = brainBThread->meanLost();
+                                //qDebug() << mean;
+
+                                brainBThread->decComp();
+                        }
+                } else {
+                        ++nofFound;
+                        nofLost = 0;
+                        if ( nofFound > 12 ) {
+
+                                if ( state == lost && firstLost ) {
+                                        lost2found.push_back ( brainBThread->get_bps() );
+                                }
+
+                                state = found;
+                                nofFound = 0;
+                                //qDebug() << "FOUND";
+                                //double mean = brainBThread->meanFound();
+                                //qDebug() << mean;
+
+                                brainBThread->incComp();
+                        }
+
+                }
+
+        }
+        pixmap = QPixmap::fromImage ( image );
+        update();
+}
+
+void BrainBWin::paintEvent ( QPaintEvent * )
+{
+        if ( pixmap.isNull() ) {
+                return;
+        }
+
+        QPainter qpainter ( this );
+
+        xs = ( qpainter.device()->width() - pixmap.width() ) /2;
+        ys = ( qpainter.device()->height() - pixmap.height() +yshift ) /2;
+
+        qpainter.drawPixmap ( xs, ys, pixmap );
+
+        qpainter.drawText ( 10, 20, "Press and hold the mouse button on the center of Samu Entropy" );
+
+        int time = brainBThread->getT();
+        int min, sec;
+        millis2minsec ( time, min, sec );
+        QString timestr = QString::number ( min ) + ":" + QString::number ( sec ) + "/10:0";
+        qpainter.drawText ( 10, 40, timestr );
+
+        int bps = brainBThread->get_bps();
+        QString bpsstr = QString::number ( bps ) + " bps";
+        qpainter.drawText ( 110, 40, bpsstr );
+
+        if ( brainBThread->get_paused() ) {
+                QString pausedstr = "PAUSED (" + QString::number ( brainBThread->get_nofPaused() ) + ")";
+
+                qpainter.drawText ( 210, 40, pausedstr );
+        }
+
+        qpainter.end();
+}
+
+void BrainBWin::mousePressEvent ( QMouseEvent *event )
+{
+
+        brainBThread->set_paused ( false );
+
+}
+
+void BrainBWin::mouseReleaseEvent ( QMouseEvent *event )
+{
+
+        //brainBThread->set_paused(true);
+
+}
+
+void BrainBWin::mouseMoveEvent ( QMouseEvent *event )
+{
+
+        start = true;
+
+        mouse_x = event->pos().x() -xs - 60;
+        //mouse_y = event->pos().y() - yshift - 60;
+        mouse_y = event->pos().y() - ys - 60;
+}
+
+void BrainBWin::keyPressEvent ( QKeyEvent *event )
+{
+
+        if ( event->key() == Qt::Key_S ) {
+                save ( brainBThread->getT() );
+        } else if ( event->key() == Qt::Key_P ) {
+                brainBThread->pause();
+        } else if ( event->key() == Qt::Key_Q ||  event->key() == Qt::Key_Escape ) {
+                close();
+        }
+
+}
+
+BrainBWin::~BrainBWin()
+{
+
+}
+
+]]>
+        </programlisting>  
+        <para>BrainBThread.h
+        </para>
+        <programlisting language="c++">
+        
+          <![CDATA[  #ifndef BrainBThread_H
+#define BrainBThread_H
+
+/**
+ * @brief Benchmarking Cognitive Abilities of the Brain with Computer Games
+ *
+ * @file BrainBThread.h
+ * @author  Norbert Bátfai <nbatfai@gmail.com>
+ * @version 6.0.1
+ *
+ * @section LICENSE
+ *
+ * Copyright (C) 2017, 2018 Norbert Bátfai, nbatfai@gmail.com
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @section DESCRIPTION
+ *
+ */
+
+#include <QThread>
+#include <QSize>
+#include <QImage>
+#include <QDebug>
+#include <sstream>
+#include <QPainter>
+#include <cstdlib>
+#include <ctime>
+#include <vector>
+#include "opencv2/opencv.hpp"
+#include "opencv2/core/core.hpp"
+#include "opencv2/imgproc/imgproc.hpp"
+
+class Hero;
+typedef std::vector<Hero> Heroes;
+
+class Hero
+{
+
+public:
+    int x;
+    int y;
+    int color;
+    int agility;
+    int conds {0};
+    std::string name;
+
+    Hero ( int x=0, int  y=0, int color=0, int agility=1,  std::string name ="Samu Entropy" ) :
+        x ( x ), y ( y ), color ( color ), agility ( agility ), name ( name )
+    {}
+    ~Hero() {}
+
+    void move ( int maxx, int maxy, int env ) {
+
+        int newx = x+ ( ( ( double ) agility*1.0 ) * ( double ) ( std::rand() / ( RAND_MAX+1.0 ) )-agility/2 ) ;
+        if ( newx-env > 0 && newx+env < maxx ) {
+            x = newx;
+        }
+        int newy = y+ ( ( ( double ) agility*1.0 ) * ( double ) ( std::rand() / ( RAND_MAX+1.0 ) )-agility/2 );
+        if ( newy-env > 0 && newy+env < maxy ) {
+            y = newy;
+        }
+
+    }
+
+};
+
+class BrainBThread : public QThread
+{
+    Q_OBJECT
+
+    
+     //Norbi
+    cv::Scalar cBg { 247, 223, 208 };
+    cv::Scalar cBorderAndText { 47, 8, 4 };
+    cv::Scalar cCenter { 170, 18, 1 };
+    cv::Scalar cBoxes { 10, 235, 252 };
+    
+
+    /*
+    //Matyi
+    cv::Scalar cBg { 86, 26, 228 };
+    cv::Scalar cBorderAndText { 14, 177, 232 };
+    cv::Scalar cCenter { 232, 14, 103 };
+    cv::Scalar cBoxes { 14, 232, 195 };
+*/
+    
+    Heroes heroes;
+    int heroRectSize {40};
+
+    cv::Mat prev {3*heroRectSize, 3*heroRectSize, CV_8UC3, cBg };
+    int bps;
+    long time {0};
+    long endTime {10*60*10};
+    int delay {100};
+
+    bool paused {true};
+    int nofPaused {0};
+
+    std::vector<int> lostBPS;
+    std::vector<int> foundBPS;
+
+    int w;
+    int h;
+    int dispShift {40};
+
+public:
+    BrainBThread ( int w = 256, int h = 256 );
+    ~BrainBThread();
+
+    void run();
+    void pause();
+    void set_paused ( bool p );
+    int getDelay() const {
+
+        return delay;
+
+    }
+    void setDelay ( int delay ) {
+
+        if ( delay > 0 ) {
+            delay = delay;
+        }
+
+    }
+
+    void devel() {
+
+        for ( Hero & hero : heroes ) {
+
+            hero.move ( w, h, ( h<w ) ?h/10:w/10 );
+
+        }
+
+    }
+
+    int nofHeroes () {
+
+        return  heroes.size();
+
+    }
+
+    std::vector<int> &lostV () {
+
+        return  lostBPS;
+
+    }
+
+    std::vector<int> &foundV () {
+
+        return  foundBPS;
+
+    }
+
+    double meanLost () {
+
+        return  mean ( lostBPS );
+
+    }
+
+    double varLost ( double mean ) {
+
+        return  var ( lostBPS, mean );
+
+    }
+
+    double meanFound () {
+
+        return  mean ( foundBPS );
+
+    }
+
+    double varFound ( double mean ) {
+
+        return  var ( foundBPS, mean );
+
+    }
+
+    double mean ( std::vector<int> vect ) {
+
+        double sum = std::accumulate ( vect.begin (), vect.end (), 0.0 );
+        return  sum / vect.size();
+
+    }
+
+    double var ( std::vector<int> vect, double mean ) {
+
+        double accum = 0.0;
+        std::for_each ( vect.begin (), vect.end (), [&] ( const double d ) {
+            accum += ( d - mean ) * ( d - mean );
+        } );
+
+        return sqrt ( accum / ( vect.size()-1 ) );
+    }
+
+    int get_bps() const {
+
+        return bps;
+
+    }
+
+    int get_w() const {
+
+        return w;
+
+    }
+
+
+    bool get_paused() const {
+
+        return paused;
+
+    }
+
+    int get_nofPaused() const {
+
+        return nofPaused;
+
+    }
+
+    void decComp() {
+
+        lostBPS.push_back ( bps );
+
+        if ( heroes.size() > 1 ) {
+            heroes.pop_back();
+        }
+
+        for ( Hero & hero : heroes ) {
+            if ( hero.agility >= 5 ) {
+                hero.agility -= 2;
+            }
+
+        }
+
+    }
+
+    void incComp() {
+
+        foundBPS.push_back ( bps );
+
+        if ( heroes.size() > 300 ) {
+
+            return;
+
+        }
+
+        /*
+        Hero other ( w/2 + 200.0*std::rand() / ( RAND_MAX+1.0 )-100,
+                     h/2 + 200.0*std::rand() / ( RAND_MAX+1.0 )-100,
+                     255.0*std::rand() / ( RAND_MAX+1.0 ), 11, "New Entropy" );
+                     */
+
+	double rx = 200.0;
+	if(heroes[0].x - 200 < 0)
+	  rx = heroes[0].x;
+	else if(heroes[0].x + 200 > w)
+	  rx = w - heroes[0].x;
+	
+	double ry = 200.0;
+	if(heroes[0].y - 200 < 0)
+	  ry = heroes[0].y;
+	else if(heroes[0].y + 200 > h)
+	  ry = h - heroes[0].y;
+	
+        Hero other ( heroes[0].x + rx*std::rand() / ( RAND_MAX+1.0 )-rx/2,
+                     heroes[0].y + ry*std::rand() / ( RAND_MAX+1.0 )-ry/2,
+                     255.0*std::rand() / ( RAND_MAX+1.0 ), 11, "New Entropy" );
+		
+        heroes.push_back ( other );
+
+        for ( Hero & hero : heroes ) {
+
+            ++hero.conds;
+            if ( hero.conds == 3 ) {
+                hero.conds = 0;
+                hero.agility += 2;
+            }
+
+        }
+
+    }
+
+    void draw () {
+
+        cv::Mat src ( h+3*heroRectSize, w+3*heroRectSize, CV_8UC3, cBg );
+
+        for ( Hero & hero : heroes ) {
+
+            cv::Point x ( hero.x-heroRectSize+dispShift, hero.y-heroRectSize+dispShift );
+            cv::Point y ( hero.x+heroRectSize+dispShift, hero.y+heroRectSize+dispShift );
+
+            cv::rectangle ( src, x, y, cBorderAndText );
+
+            cv::putText ( src, hero.name, x, cv::FONT_HERSHEY_SIMPLEX, .35, cBorderAndText, 1 );
+
+            cv::Point xc ( hero.x+dispShift , hero.y+dispShift );
+
+            cv::circle ( src, xc, 11, cCenter, CV_FILLED, 8, 0 );
+
+            cv::Mat box = src ( cv::Rect ( x, y ) );
+
+            cv::Mat cbox ( 2*heroRectSize, 2*heroRectSize, CV_8UC3, cBoxes );
+            box = cbox*.3 + box*.7;
+
+        }
+
+        cv::Mat comp;
+
+        cv::Point focusx ( heroes[0].x- ( 3*heroRectSize ) /2+dispShift, heroes[0].y- ( 3*heroRectSize ) /2+dispShift );
+        cv::Point focusy ( heroes[0].x+ ( 3*heroRectSize ) /2+dispShift, heroes[0].y+ ( 3*heroRectSize ) /2+dispShift );
+        cv::Mat focus = src ( cv::Rect ( focusx, focusy ) );
+
+        cv::compare ( prev, focus, comp, cv::CMP_NE );
+
+        cv::Mat aRgb;
+        cv::extractChannel ( comp, aRgb, 0 );
+
+        bps = cv::countNonZero ( aRgb ) * 10;
+
+        //qDebug()  << bps << " bits/sec";
+
+        prev = focus;
+
+        QImage dest ( src.data, src.cols, src.rows, src.step, QImage::Format_RGB888 );
+        dest=dest.rgbSwapped();
+        dest.bits();
+
+        emit heroesChanged ( dest, heroes[0].x, heroes[0].y );
+
+    }
+
+    long getT() const {
+
+        return time;
+
+    }
+
+    void finish () {
+
+        time = endTime;
+
+    }
+
+
+signals:
+
+    void heroesChanged ( const QImage &image, const int &x, const int &y );
+    void endAndStats ( const int &t );
+
+};
+
+#endif // BrainBThread_H
+
+]]>
+        </programlisting>  
+        <para>BrainBThread.cpp
+        </para>
+        <programlisting language="c++">
+        
+          <![CDATA[  /**
+ * @brief Benchmarking Cognitive Abilities of the Brain with Computer Games
+ *
+ * @file BrainBThread.cpp
+ * @author  Norbert Bátfai <nbatfai@gmail.com>
+ * @version 6.0.1
+ *
+ * @section LICENSE
+ *
+ * Copyright (C) 2017, 2018 Norbert Bátfai, nbatfai@gmail.com
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @section DESCRIPTION
+ *
+ */
+
+#include "BrainBThread.h"
+
+BrainBThread::BrainBThread ( int w, int h )
+{
+
+        dispShift = heroRectSize+heroRectSize/2;
+
+        this->w = w - 3 * heroRectSize;
+        this->h = h - 3 * heroRectSize;
+
+        std::srand ( std::time ( 0 ) );
+
+        Hero me ( this->w / 2 + 200.0 * std::rand() / ( RAND_MAX + 1.0 ) - 100,
+                  this->h / 2 + 200.0 * std::rand() / ( RAND_MAX + 1.0 ) - 100, 255.0 * std::rand() / ( RAND_MAX + 1.0 ), 9 );
+
+        Hero other1 ( this->w / 2 + 200.0 * std::rand() / ( RAND_MAX + 1.0 ) - 100,
+                      this->h / 2 + 200.0 * std::rand() / ( RAND_MAX + 1.0 ) - 100, 255.0 * std::rand() / ( RAND_MAX + 1.0 ), 5, "Norbi Entropy" );
+        Hero other2 ( this->w / 2 + 200.0 * std::rand() / ( RAND_MAX + 1.0 ) - 100,
+                      this->h / 2 + 200.0 * std::rand() / ( RAND_MAX + 1.0 ) - 100, 255.0 * std::rand() / ( RAND_MAX + 1.0 ), 3, "Greta Entropy" );
+        Hero other4 ( this->w / 2 + 200.0 * std::rand() / ( RAND_MAX + 1.0 ) - 100,
+                      this->h / 2 + 200.0 * std::rand() / ( RAND_MAX + 1.0 ) - 100, 255.0 * std::rand() / ( RAND_MAX + 1.0 ), 5, "Nandi Entropy" );
+        Hero other5 ( this->w / 2 + 200.0 * std::rand() / ( RAND_MAX + 1.0 ) - 100,
+                      this->h / 2 + 200.0 * std::rand() / ( RAND_MAX + 1.0 ) - 100, 255.0 * std::rand() / ( RAND_MAX + 1.0 ), 7, "Matyi Entropy" );
+
+        heroes.push_back ( me );
+        heroes.push_back ( other1 );
+        heroes.push_back ( other2 );
+        heroes.push_back ( other4 );
+        heroes.push_back ( other5 );
+
+}
+
+BrainBThread::~BrainBThread()
+{
+
+}
+
+void BrainBThread::run()
+{
+        while ( time < endTime ) {
+
+                QThread::msleep ( delay );
+
+                if ( !paused ) {
+
+                        ++time;
+
+                        devel();
+
+                }
+
+                draw();
+
+        }
+
+        emit endAndStats ( endTime );
+
+}
+
+void BrainBThread::pause()
+{
+
+        paused = !paused;
+        if ( paused ) {
+                ++nofPaused;
+        }
+
+}
+
+void BrainBThread::set_paused ( bool p )
+{
+
+        if ( !paused && p ) {
+                ++nofPaused;
+        }
+
+        paused = p;
+
+}
+
+
+
+
+]]>
+        </programlisting>  
+        <para>
+            Megoldás forrása: <link xlink:href=""></link>               
+        </para>
+
+        <para>
+            A BrainB egy tesztelő program ami azt figyeli hogy a játékos mennyire tud a 
+            saját objektumára figyelni. A saját objektuma felet kell tartania az egér mutatót
+             és minél tovább sikerül rajtatartani annál 
+            több más objektumot pakol le a program ezzel nehezítve a játékos dolgát.
+        </para>            
+    </section>        
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        
+</chapter>                
