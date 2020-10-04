@@ -323,6 +323,218 @@ public class Main {
       </programlisting>
 
 
+    </section>
+    <section>
+        <title>2.hét</title>
+        <para>EPAM:Interfész evolúció Java ban</para>
+        <para>A java 8 előt csak abstract metódust lehetet az interfészekben használni. Minden
+            metódus public és abstract alapból. A java 8 tól kezdve lehet default és static
+            metódusokat is használni. A default metódus lehetővé teszi a fejlesztőnek hogy anélkül
+            agyon hozza az iterface hez egy metódust hogy azzal befolyásolná azokat az osztályokat
+            amelyek használják az adott interfacet. Ezt a tulajdonságot nevezhetjük vissza felé
+            kompatibilitásnak is mivel ezzel a képességet ki használva egy létező kódba tudunk új
+            funkciót belerakni anélkül hogy tönkretenénk a már létező kódott vagy teljesen újra
+            kellene írnunk. A ataticus metódusok hasonlóan viselkednek a default metódusokhoz azzal
+            a külömbséggel hogy ezeket a metódusokat nem lehet felülírni az osztájokban. Ez a két új
+            funkció felveti a töbszörös öröklődés kérdését is, ha van két interface amiben van egy
+            egy ugyan ujan nevü metódus és egy osztáj egyszere implementálja mind két interfacet nem
+            lehet eldönteni hogy melyik metódus futsonle. Erre egy megoldás ha az ilyen metódusokat
+            felul definiáljuk</para>
+        <para>EPAM:Liskov féle helyettesít hetőség elve, öröklődés</para>
+        <para>osztály definiciók:</para>
+        <programlisting> public class Vehicle {
+
+    public Vehicle() {
+        System.out.println("Creating vehicle!");
+    }
+
+    void start() {
+        System.out.println("Vehicle is starting!");
+    }
+
+}
+ </programlisting>
+        <programlisting>  public class Car extends Vehicle {
+     
+    public Car() {
+        System.out.println("Creating car!");
+    }
+
+    @Override
+    void start() {
+        System.out.println("Car is starting!");
+    }
+
+}
+</programlisting>
+        <programlisting> package com.epam.training;
+
+public class Supercar extends Car {
+
+    public Supercar() {
+        System.out.println("Creating supercar!");
+    }
+
+    @Override
+    void start() {
+        System.out.println("Supercar is starting!");
+    }
+
+}
+ </programlisting>
+        <para>tesztelése:</para>
+        <programlisting>Vehicle firstVehicle = new Supercar();
+firstVehicle.start();
+System.out.println(firstVehicle instanceof Car);
+</programlisting>
+        <para>kimenet:</para>
+        <programlisting>Creating vehicle!
+Creating car!
+Creating supercar!
+Supercar is starting!
+true</programlisting>
+        <para>A firstVehicle létrehozásánál mivel Supercar-ból let létre hozva ezért lefut a
+            Vehicle a Car és a Supercar construktora is de mivel a firstVehicle  Car tipusu így csak
+            a Car metódusait éri el.</para>
+        <programlisting>Car secondVehicle = (Car) firstVehicle;
+secondVehicle.start();
+System.out.println(secondVehicle instanceof Supercar);
+
+System.out.println(firstVehicle.toString());
+System.out.println(secondVehicle.toString());</programlisting>
+        <para>kimenet:</para>
+        <programlisting>Supercar is starting!
+true
+com.epam.training.Supercar@25618e91
+com.epam.training.Supercar@25618e91</programlisting>
+        <para>Az érték adásnál Car-t adunk árt Car-nak de mivel az átadot Car egy Supercar volt így
+            átadás után is az marad mert csak a címét adta át az objektumnak. </para>
+        <programlisting>
+Supercar thirdVehicle = new Vehicle();
+thirdVehicle.start();</programlisting>
+        <para>Itt mivel a Supercar bőveb mint a Vehicle nem tudja belőle létrehozni .</para>
+        <para>EPAM: Interfész, Osztály, Absztrak Osztály</para>
+        <para>Az interfacekkel teljes szintü absztarkció valósitható meg míg a abstract osztájal
+            csak részleges abstrakció valósitható meg. Az interface egy tervrajzhoz hasonlítható míg
+            az abstract class csak azt engedi meg hogy az eredeti class egyes részeit mi mondhatjuk
+            meg hogy definiáljuk</para>
+        <programlisting>package abstractClassClass;
+
+public abstract class IntegerStorage {
+	
+	int [] storage;
+	int numberOfElement;
+	final int MAX_NUMBER_OF_ELEMENT=10;
+	
+	public IntegerStorage() {
+		super();
+		this.storage =  new int [MAX_NUMBER_OF_ELEMENT];
+		numberOfElement = -1;
+	}
+	
+	abstract public void add(int value);
+	abstract public int get();
+	abstract public boolean contain(int value);
+
+
+}
+</programlisting>
+        <programlisting>package abstractClassClass;
+
+public class IntegerStorageFiFo extends IntegerStorage{
+
+	@Override
+	public void add(int value) {
+		if (numberOfElement &lt;MAX_NUMBER_OF_ELEMENT) {
+			numberOfElement++;
+			storage[numberOfElement] = value;
+		}
+		
+	}
+
+	@Override
+	public int get() {
+		numberOfElement--;
+		return storage[numberOfElement+1];
+	}
+
+	@Override
+	public boolean contain(int value) {
+		int i=0;
+		while ((i&lt;=numberOfElement)&amp;&amp; (storage[i]!= value)) {
+			i++;
+		}
+		
+		if (i&lt;=numberOfElement) {
+			return true;
+		}else {
+			return false;
+		}
+	}
+	
+
+}
+</programlisting>
+        <programlisting>package interfaceClass;
+
+public interface IntegerStorage {
+
+	public void add(int value);
+	public int get();
+	public boolean contain(int value);
+	
+}
+</programlisting>
+        <programlisting>package interfaceClass;
+
+public class IntegerStorageFiFo implements IntegerStorage {
+
+	int [] storage;
+	int numberOfElement;
+	final int MAX_NUMBER_OF_ELEMENT=10;
+	
+	public IntegerStorageFiFo() {
+		super();
+		this.storage =  new int [MAX_NUMBER_OF_ELEMENT];
+		numberOfElement = -1;
+	}
+
+	public void add(int value) {
+		
+		if (numberOfElement &lt;MAX_NUMBER_OF_ELEMENT) {
+			numberOfElement++;
+			storage[numberOfElement] = value;
+		}
+		
+	}
+
+	public int get() {
+		numberOfElement--;
+		return storage[numberOfElement+1];
+	}
+
+	public boolean contain(int value) {
+		int i=0;
+		while ((i&lt;=numberOfElement)&amp;&amp; (storage[i]!= value)) {
+			i++;
+		}
+		
+		if (i&lt;=numberOfElement) {
+			return true;
+		}else {
+			return false;
+		}
+	}
+ 
+}
+</programlisting>
+        <para>A példában bemutat kódban az abstrac class nál meg adjuk hogy milyen adat szerkezetett
+            használunk de azt nem hogy ezzel hogyan dolgozunk, míg az interface nél ezt se adtuk meg
+            teljesen fugetlen tőle csak azt adtuk meg hogy milyen metódosokat használjon. Az
+            abstrakció szintjétől/igényétől függ hogy mejiket érdemes használni. Ha pedig egyáltalán
+            nics absztrakcióra szükség akkor érdemes Class-t használni. Az interfacek e melet arra
+            is jók hogy egy azt implicáló osztályt tudjunk használni annak a belső működése ismerete
+            nélkül. Ez elősegiti program kód tagolását is.</para>
     </section>    
   
   <section>
