@@ -15,20 +15,20 @@
         </para>
         <para>
            Általános információk: A Python egy általános célú programozási nyelv. Guido van Rossum 1990-ben
-      alkotta meg ezt a fejleszt˝ok számára rengeteg pozitív tulajdonsággal rendel- kez˝o nyelvet, amely magas
-      szint˝u, dinamikus, objektumorientált és platform- független. A fejlesztés megkönnyítéséhez magas szint˝u
+      alkotta meg ezt a fejlesztők számára rengeteg pozitív tulajdonsággal rendelkező nyelvet, amely magas
+      szintű, dinamikus, objektumorientált és platform- független. A fejlesztés megkönnyítéséhez magas szintű
       típusokat is támogat, mint például különféle listák és szótárak.
-      El˝onyei miatt az interpretert elkészítették a Symbian mobil operációs rendszer S60 platformja alá is, hogy
-      megkönnyítsék az egyszer˝ubb szoftver és prototípusfejlesztést mobil készülékekre. A Python S60 implementáció
-      nagy- részt lefedi az alap Pythont, azonban egy-két modult kihagytak bel˝ole, amely nem kapcsolódik
+      Előnyei miatt az interpreter elkészítették a Symbian mobil operációs rendszer S60 platformja alá is, hogy
+      megkönnyítsék az egyszerűbb szoftver és prototípusfejlesztést mobil készülékekre. A Python S60 implementáció
+      nagy- részt lefedi az alap Pythont, azonban egy-két modult kihagytak belőle, amely nem kapcsolódik
       szorosan a mobileszközökhöz.
-      A Python nyelv jellemz˝oi Amikor alkalmazásokat fejlesztünk, sok esetben szükség van olyan részek megírására
-      is, amelyek az adott probléma szempontjából nem relevánsak, el- készítésük mégis sok id˝ot vesz
-      igénybe. Ilyenek például a különféle fájlkezel˝o metódusok, hálózatkezelés, GUI kialakítása stb. A szokásos
-      programírás/forditás/tesztelés/újrafordítás ciklust egy professzi- onális C, C++ vagy Java-fejleszt˝o is
-      lassúnak találja egy id˝o után, márpedig er- re minden módosítás esetében szükség van. A Python ebben is
-      segít, esetében ugyanis nincs szükség a fordítás fázisára, az értelmez˝onek elegend˝o a Python- forr
-      A Python nyelv legf˝obb jellemz˝oje, hogy behúzásalapú a szintaxisa. A prog- ramban szerepl˝o állításokat
+      A Python nyelv jellemzői Amikor alkalmazásokat fejlesztünk, sok esetben szükség van olyan részek megírására
+      is, amelyek az adott probléma szempontjából nem relevánsak, el- készítésük mégis sok időt vesz
+      igénybe. Ilyenek például a különféle fájlkezelő metódusok, hálózatkezelés, GUI kialakítása stb. A szokásos
+      programírás/fordítás/tesztelés/újra fordítás ciklust egy professzionális C, C++ vagy Java-fejlesztő is
+      lassúnak találja egy idő után, márpedig erre minden módosítás esetében szükség van. A Python ebben is
+      segít, esetében ugyanis nincs szükség a fordítás fázisára, az értelmezőnek elegendő a Python- forr
+      A Python nyelv legfőbb jellemzője, hogy behúzásalapú a szintaxisa. A prog- ramban szerepl˝o állításokat
       az azonos szint˝u behúzásokkal tudjuk csoportok- ba szervezni, nincs szükség kapcsos zárójelre vagy explicit
       kulcsszavakra (pl. begin, end). Egy adott blokk végét egy kisebb behúzású sor jelzi, tehát például
       üres sor lehet a blokkon belül. A szkript els˝o utasítása nem lehet behúzott. Fontos, hogy a behúzásokat
@@ -36,7 +36,7 @@
       ˝okben akár azt is beállíthatjuk, hogy a tab billenty˝u lenyomása 4 szóközt jelentsen. A nyelv
       további sajátossága, hogy a sor végéig tart egy utášítás, nincs szükség a megszokott ;’ használatára.
       Pythonban minden adatot objektumok reprezentálnak. Az adatokon végezhe- t˝o m˝uveleteket az objektum
-      típusa határozza meg. Pythonban nincs szükség a változók típusainak explicit megadására, a rendszer
+      típusa határozza meg. Pythonban nincs szükség a változók típusainak explicit megadására, a rendszer 
       futási id˝oben, automa- tikusan „kitalálja" a változók típusát a hozzárendelt érték alapján. Az adattípusok a
       következ˝ok lehetnek: számok, sztringek, ennesek (tuples, n-es), listák, szótárak (dictionaries).
       Változók és alkalmazásuk Pythonban a változók alatt az egyes objektumokra mutató referenciákat ér- tünk.
@@ -61,33 +61,33 @@
       </para>
       
       <para>
-        kifejezés fogalom ua.:Kifejezések olyan kód részletek amelyek valami műveletet végeznek és a művelet eredményét adják vissza, vagypedig valami értéket reprezentálnak.
+        kifejezés fogalom ua.:Kifejezések olyan kód részletek amelyek valami műveletet végeznek és a művelet eredményét adják vissza, vagy pedig valami értéket reprezentálnak.
         ,
         stb:Java esetén egy osztály definíciója és deklarációja,azaz az eljárások feje és megvalósítása nem szétválasztható, mint például C++-ban.
         Ahogy C++-ban, úgy a Javában is felsorolhatunk változókat,de a Java megengedi, hogy inicializáljuk is azokat,konstruktoron kívül
         konstruktor: Ennek neve – ahogy C++-ban is – megegyezik az osztály nevével, nincs visszatérési értéke.
         final: Végleges, azaz konstans érték (nem ugyanaz mint a C++ const! Hiszen itt a referencia az az érték, ami nem változtatható, de ettől még a hivatkozott objektum állapota változtatható)
-        Javaban minden metódus olyan, mint C++-ban a virtual kulcsszóval ellátottak.Itt a dinamikus kötés automatikusan létrejön! Ha a metódus az osztályban nem static jelzővel illetett, akkor nincs olyan momentum, amely egyértelműen az alaposztályához kötné (azaz példánymetódus). A kötés ekkor csakis dinamikus lehet, ami azért érdekes helyzet, mert előre senki sem tudhatja (legfőképpen a JVM nem), hogy éppen melyik példánymetódus fut, azaz a kötés csakis a futási idő alatt jöhet létre. Ezért illetik egyúttal a dinamikus kötést a következő jelzőkkel:futás alatti kötés:runtime binding,
-        ,késői kötés - late binding, illetve dinamikus kötés alatti példánymetódus-keresés folyamatát dinamikus metóduskeresésnek (dynamic method lookup). A keresés végeredménye ebben az esetben csakis az lehet, hogy az éppen aktuálisan futó objektum kerül végrehajtásra. c++ ehhez avirtual jelzőt kell használni
+        Javában minden metódus olyan, mint C++-ban a virtual kulcsszóval ellátottak.Itt a dinamikus kötés automatikusan létrejön! Ha a metódus az osztályban nem static jelzővel illetett, akkor nincs olyan momentum, amely egyértelműen az alaposztályához kötné (azaz példánymetódus). A kötés ekkor csakis dinamikus lehet, ami azért érdekes helyzet, mert előre senki sem tudhatja (legfőképpen a JVM nem), hogy éppen melyik példánymetódus fut, azaz a kötés csakis a futási idő alatt jöhet létre. Ezért illetik egyúttal a dinamikus kötést a következő jelzőkkel:futás alatti kötés:runtime binding,
+        ,késői kötés - late binding, illetve dinamikus kötés alatti példánymetódus-keresés folyamatát dinamikus metóduskeresésnek (dynamic method lookup). A keresés végeredménye ebben az esetben csakis az lehet, hogy az éppen aktuálisan futó objektum kerül végrehajtásra. c++ ehhez a virtual jelzőt kell használni
         Javában minden objektum:referencia:
         klónozás
-        A java a c++ szal elentétben platform fügetlen mivel egy virtuális gépen futt ez a JVM és JRE ezen felül van a JDK ami már a java programok fejélesztéséhez szükséges. Ebből következik, hogy a java programoknak roszab az optimalizáltsága a c+++ hoz képes amit a forditó programok gépi nyelvre forditanak de szintén ebből következik hogy könyebben hordozhatóak és biztonságosabak a java programok.
+        A java a c++-al ellentétben platform független mivel egy virtuális gépen fut ez a JVM és JRE ezen felül van a JDK ami már a java programok fejélesztéséhez szükséges. Ebből következik, hogy a java programoknak rosszabb az optimalizáltságga  a c+++ hoz képes amit a fordító programok gépi nyelvre fordítanak de szintén ebből következik hogy könnyebben hordozhatók és biztonságosabbak a java programok.
 
-        C++ elsősorban rendszerprogramozásra használják míg A javat alkalmazások fejlesztésére. Széleskörben használják webes, mobilos alkalmazások fejlesztésére. Ennek fő okai a könyű egységekre bontás és tagolása a programoknak.
+        C++ elsősorban rendszerprogramozásra használják míg A javat alkalmazások fejlesztésére. Széleskörben használják webes, mobilos alkalmazások fejlesztésére. Ennek fő okai a könnyű egységekre bontás és tagolása a programoknak.
 
-        Goto utasitás a c6+ támogatja de a java nem . (de alapvetően egy jól strukturát programban nincs is szükség a goto utasitáős használatára)
+        Goto utasítás a c6+ támogatja de a java nem . (de alapvetően egy jól struktúrát programban nincs is szükség a goto utasítás használatára)
 
-        A c++ támogatja a töbszörös öröklődést míg a java nem támogatja a töbszörös öröklődést osztájok között.DE az interfacek használatával a jávában is át hidalható ez a probléma
+        A c++ támogatja a többszörös öröklődést míg a java nem támogatja a többszörös öröklődést osztályok között.DE az interfacek használatával a jávában is át hidalható ez a probléma
 
-        Az operátor túlterhelést nem támogatja a java a c++szal szemben ahol ez egy bevet metódus a javaban külön fügvények segitségével oldható fel ez a probléma.,
+        Az operátor túlterhelést nem támogatja a java a c++-al szemben ahol ez egy bevet metódus a javaban külön függvények segítségével oldható fel ez a probléma.,
 
-        Míg c++ teljesen ntámogatja a pointerek felhasználását a programmokban adig a java csak belsőleg támogatja őket nem írható mutatókat expőlicite használó program.
+        Míg c++ teljesen támogatja a pointerek felhasználását a programokban addig a java csak belsőleg támogatja őket nem írható mutatókat explicite használó program.
         Ez azt jelenti, hogy a java korlátozta a mutató támogatását
 
-        C++ ban mind érték mind referencia alapján lehet hívni adig java nem támogatja a referencia alapu hívást csak érték alapu hívások vanak a jávában.
+        C++ ban mind érték mind referencia alapján lehet hívni addig java nem támogatja a referencia alapú hívást csak érték alapú hívások vannak a jávában.
 
-        A java mindig egy öröklődési fát tartalmaz mert minden osztály az Object class gyermeke. A jávában mindig az Object Class a gyökere az öröklődési fának. Ezzel szemben a c++ mindig új öröklődési fát készit.
-        A jdk JRE JVM felépitéséből adódóan a Java nem lép kapcsolatba közvetlenül a hardwarerel míg a c++ forditási metódusából adódóan az abban írt programok igen.
+        A java mindig egy öröklődési fát tartalmaz mert minden osztály az Object class gyermeke. A jávában mindig az Object Class a gyökere az öröklődési fának. Ezzel szemben a c++ mindig új öröklődési fát készít.
+        A jdk JRE JVM felépitéséből adódóan a Java nem lép kapcsolatba közvetlenül a hardwarerel míg a c++ fordítási metódusából adódóan az abban írt programok igen.
 
       </para>
       
@@ -104,7 +104,7 @@
 Elsőként tisztázzuk a két fogalmat. Az eljárás orientált nyelvek alatt azokat értjük melyek struktúrát programozási elvek alapján működnek, mely eljárás híváson alapszik. Ezek az eljárások a program során bármikor meg hívhatóak, akár saját magukat is hívhatják. A feladatokat lépésről lépésre bontja le az eljárás orientált program változókra és eljárásokra melyek szekvenciális utasításokat tartalmaznak. Ezzel szemben az Objektumorientált nyelvek az objektumokon alapszanak melyeknek vannak tulajdonságuk és viselkedésük melyekkel képesek megváltoztatni a saját és más objektumok tulajdonságait.
 Az elmondható mind két paradigmáról, hogy kisebrészekre bontják fel a problémát ezen keresztül pedig a kódot is. A nagy különbség a kettő féle felbontásban az hogy az objektumorientáltnál sokall könnyebb utólagosan változtatni a programon egy jól meg tervezet programnál csak az adott objektumon kel választani. Míg az eljárás orientáltnál mivel az egész egy programként kezelődik így az egész program változik. Ebből következik az is, hogy az objektumorientált programok sokkal modulárisabbak egyes modulokat akár több programnál is fel lehet használni ezáltal és az által, hogy jobban tagolható az írása rövidül a fejlesztési idő is.
 Objektumorientált nyelvekben lehet szabályozni a láthatóságot (public, private, protected) mely segítségével elrejthetők az adatok ezáltal biztonságosabb mint az eljárásorientált nyelvek ahol erre nincs lehetőség.
-Az objektum orientált nyelveknél könnyebb bővités az öröklődésnek köszönhetően. Erre az eljárás orientált nyelveknél nincs lehetőség.
+Az objektum orientált nyelveknél könnyebb bővítés az öröklődésnek köszönhetően. Erre az eljárás orientált nyelveknél nincs lehetőség.
         </para>
         <para>
            Java Object metódusok :              
@@ -113,16 +113,16 @@ Az objektum orientált nyelveknél könnyebb bővités az öröklődésnek kösz
             protected Object clone(): Vissza tér egy másolatával az adott objektumnak. x.clone() != x igazat fog adni, x.clone().equals(x) igazat fog adni de ez nem elvárás a használathoz felül kel definiálni a protected miatt nem látszik.
         </para>
     <para>
-            Boolean equals​(Object obj) : megalapítja hogy egy objectum egyenlő-e azzal amelyből hívjuk. Abban az esetben kell felüldefiniálni ezt a  metódust ha az adott objektum más objektumot is tartalmaz mer ebben az esetben az objektum == operátorral hasonlítja össze és így csak akkor ad igazat ha ugyan arra a helyre mutatnak. Abban az esetben ha felül definiáljuk a  equals() metódust a hasCode() metódust is illik felüldefiniálni mivel az egynlő objectumoknak ugyan annak kell lenije a has kódjának.
+            Boolean equals​(Object obj) : megalapítja hogy egy objectum egyenlő-e azzal amelyből hívjuk. Abban az esetben kell felüldefiniálni ezt a  metódust ha az adott objektum más objektumot is tartalmaz mer ebben az esetben az objektum == operátorral hasonlítja össze és így csak akkor ad igazat ha ugyan arra a helyre mutatnak. Abban az esetben ha felül definiáljuk a  equals() metódust a hasCode() metódust is illik felüldefiniálni mivel az egyenlő objectumoknak ugyan annak kell lenije a has kódjának.
         </para>
           <para>
-            Class  getClass() Viszatér az osztájal futás időben mellyel különböző információkat nyerhetünk ki az osztályról.
+            Class  getClass() Visszatér az osztállyal futás időben mellyel különböző információkat nyerhetünk ki az osztályról.
         </para>
         <para>
             Int hashCode() Vissza tér egy has értékel az objektumra.
 Egy futtatás alatt egy adott objektumnak nem szabad változnia a has kódjának de futások között már változhat
 ha két objectom egyenlő az  equals(Object) metódus alapján akkor ugyan azt a has értéket kell hogy kapják
-az nem elvárás ha két objektum különbözik akkor külön hash vódot kapjanak
+az nem elvárás ha két objektum különbözik akkor külön hash kódot kapjanak
         </para>
         <para>
             Void notify() Egyetlen szálat ébreszt fel, amely az objektum monitorára vár. Az felébresztett szál addig nem folytatódik, amíg az aktuális szál nem oldja fel az objektum zárolását csak az objektum „gazdája” adhatja ki ezt az utasítást. A fel ébresztett szál nem élvez semmilyen előjogot az objektumra
@@ -131,7 +131,7 @@ az nem elvárás ha két objektum különbözik akkor külön hash vódot kapjan
             Void notifyAll() Minden szálat  fel ébreszt , amely az objektum monitorára vár. A fel ébresztett szálak nem élveznek semmilyen előjogot az objektumra
         </para>
         <para>
-            String toString()	 Egy stringgle tér visza ami meg adja az objektumot érdemes felül definiálni alapértellmezetten ezt a kifejezést adja vissza: getClass().getName() + '@' + Integer.toHexString(hashCode())
+            String toString()	 Egy stringgle tér vissza ami meg adja az objektumot érdemes felül definiálni alapértelmezetten ezt a kifejezést adja vissza: getClass().getName() + '@' + Integer.toHexString(hashCode())
         </para>
   <para>
             Void wait() A aktuális szál várását eredményezi míg fel nem ébresztik,vagy meg nem szakítják.
@@ -169,7 +169,7 @@ Az Object Pool (más néven erőforráskészletek) az objektum-gyorsítótár ke
 </para><para>
 Prototype Design Pattern
 </para><para>
-létre hoz egy objektumot majd ezt az objektumot módosítja és clonozza ehez használnia kell a clone abel interfészt .  A new operátor káros. Egy objektüm az őse minden objekumnak
+létre hoz egy objektumot majd ezt az objektumot módosítja és clonozza ehez használnia kell a clone abel interfészt .  A new operátor káros. Egy objektum az őse minden objekumnak
     </para>
 
       <para>
@@ -327,20 +327,20 @@ public class Main {
     <section>
         <title>2.hét</title>
         <para>EPAM:Interfész evolúció Java ban</para>
-        <para>A java 8 előt csak abstract metódust lehetet az interfészekben használni. Minden
+        <para>A java 8 élőt csak abstract metódust lehetet az interfészekben használni. Minden
             metódus public és abstract alapból. A java 8 tól kezdve lehet default és static
             metódusokat is használni. A default metódus lehetővé teszi a fejlesztőnek hogy anélkül
             agyon hozza az iterface hez egy metódust hogy azzal befolyásolná azokat az osztályokat
             amelyek használják az adott interfacet. Ezt a tulajdonságot nevezhetjük vissza felé
             kompatibilitásnak is mivel ezzel a képességet ki használva egy létező kódba tudunk új
-            funkciót belerakni anélkül hogy tönkretenénk a már létező kódott vagy teljesen újra
-            kellene írnunk. A ataticus metódusok hasonlóan viselkednek a default metódusokhoz azzal
-            a külömbséggel hogy ezeket a metódusokat nem lehet felülírni az osztájokban. Ez a két új
-            funkció felveti a töbszörös öröklődés kérdését is, ha van két interface amiben van egy
-            egy ugyan ujan nevü metódus és egy osztáj egyszere implementálja mind két interfacet nem
+            funkciót belerakni anélkül hogy tönkretennék a már létező kódot vagy teljesen újra
+            kellene írnunk. A staticus metódusok hasonlóan viselkednek a default metódusokhoz azzal
+            a különbséggel hogy ezeket a metódusokat nem lehet felülírni az osztályokban. Ez a két új
+            funkció felveti a többszörös öröklődés kérdését is, ha van két interface amiben van egy
+            egy ugyan olyan nevű metódus és egy osztály egyszere implementálja mind két interfacet nem
             lehet eldönteni hogy melyik metódus futsonle. Erre egy megoldás ha az ilyen metódusokat
-            felul definiáljuk</para>
-        <para>EPAM:Liskov féle helyettesít hetőség elve, öröklődés</para>
+            felül definiáljuk</para>
+        <para>EPAM:Liskov féle helyettesíthetőség elve, öröklődés</para>
         <para>osztály definiciók:</para>
         <programlisting> public class Vehicle {
 
@@ -414,8 +414,8 @@ Supercar thirdVehicle = new Vehicle();
 thirdVehicle.start();</programlisting>
         <para>Itt mivel a Supercar bőveb mint a Vehicle nem tudja belőle létrehozni .</para>
         <para>EPAM: Interfész, Osztály, Absztrak Osztály</para>
-        <para>Az interfacekkel teljes szintü absztarkció valósitható meg míg a abstract osztájal
-            csak részleges abstrakció valósitható meg. Az interface egy tervrajzhoz hasonlítható míg
+        <para>Az interfacekkel teljes szintű absztrakció valósítható meg míg a abstract osztállyal
+            csak részleges absztrakció valósítható meg. Az interface egy tervrajzhoz hasonlítható míg
             az abstract class csak azt engedi meg hogy az eredeti class egyes részeit mi mondhatjuk
             meg hogy definiáljuk</para>
         <programlisting>package abstractClassClass;
@@ -528,13 +528,823 @@ public class IntegerStorageFiFo implements IntegerStorage {
  
 }
 </programlisting>
-        <para>A példában bemutat kódban az abstrac class nál meg adjuk hogy milyen adat szerkezetett
+        <para>A példában bemutat kódban az abstrac class nál meg adjuk hogy milyen adat szerkezetet
             használunk de azt nem hogy ezzel hogyan dolgozunk, míg az interface nél ezt se adtuk meg
-            teljesen fugetlen tőle csak azt adtuk meg hogy milyen metódosokat használjon. Az
-            abstrakció szintjétől/igényétől függ hogy mejiket érdemes használni. Ha pedig egyáltalán
-            nics absztrakcióra szükség akkor érdemes Class-t használni. Az interfacek e melet arra
-            is jók hogy egy azt implicáló osztályt tudjunk használni annak a belső működése ismerete
-            nélkül. Ez elősegiti program kód tagolását is.</para>
+            teljesen független tőle csak azt adtuk meg hogy milyen metódusokat használjon. Az
+            abstrakció szintjétől/igényétől függ hogy melyiket érdemes használni. Ha pedig egyáltalán
+            nics absztrakcióra szükség akkor érdemes Class-t használni. Az interfacek e mellet arra
+            is jók hogy egy azt implikáló osztályt tudjunk használni annak a belső működése ismerete
+            nélkül. Ez elő segíti program kód tagolását is.</para>
+    </section>
+    <section>
+        <title>3.hét</title>
+        <para>EPAM: Neptun tantárgyfelvétel modellezése UML ben</para>
+        <para><inlinemediaobject>
+                <imageobject>
+                    <imagedata fileref="./Targyfelveteluml.png"/>
+                </imageobject>
+            </inlinemediaobject></para>
+        <para>EPAM: Neptun tantárgyfelvétel UML diagram implementálása</para>
+        <para>Abstract class NeptunEntity</para>
+        <para>Azt az osztályt azért hoztam létre mert voltak azonos attribútumaik a Student-nek és a
+            Lessen-nek</para>
+        <programlisting>package targyfelvetel;
+
+public abstract class NeptunEntity {
+	protected String neptunCode;
+	protected String name;
+	
+	
+	
+	
+	public NeptunEntity(String neptunCode, String name) {
+		super();
+		this.neptunCode = neptunCode;
+		this.name = name;
+	}
+	protected String getNeptunCode() {
+		return neptunCode;
+	}
+	protected void setNeptunCode(String neptunCode) {
+		this.neptunCode = neptunCode;
+	}
+	protected String getName() {
+		return name;
+	}
+	protected void setName(String name) {
+		this.name = name;
+	}
+	
+	
+}
+</programlisting>
+        <para>Lessen class felelős az órák ért azoknak az adatainak a tárolásáért és
+            beállításaiért</para>
+        <programlisting>package targyfelvetel;
+
+import java.util.Map;
+
+public class Lessen extends NeptunEntity{
+	
+	boolean takeAble;
+	int maxNumberStudent;
+	int currentNumberOfStudent;
+	//TODO linkidmap cserélni map re 
+	
+	private Lessen(String neptunCode, String name, int maxNumberStudent) {
+		super(neptunCode, name);
+		this.takeAble = true;
+		this.maxNumberStudent = maxNumberStudent;
+		this.currentNumberOfStudent = 0;
+	}
+	
+	static public void getANewLessen(Map&lt;String, Lessen>lessens,String neptunCode, String name, int maxNumberStudent) {
+		
+		Lessen curentLessen=new Lessen(neptunCode, name, maxNumberStudent);
+		lessens.put(neptunCode, curentLessen);
+	}
+
+
+	public boolean isTakeAble() {
+		return takeAble;
+	}
+
+
+	public void setTakeAble(boolean takeAble) {
+		this.takeAble = takeAble;
+	}
+
+
+	public int getMaxNumberStudent() {
+		return maxNumberStudent;
+	}
+
+
+	public void setMaxNumberStudent(int maxNumberStudent) {
+		this.maxNumberStudent = maxNumberStudent;
+	}
+
+
+	public int getCurrentNumberOfStudent() {
+		return currentNumberOfStudent;
+	}
+	
+	public boolean chekTakeAble() {
+		if (currentNumberOfStudent&lt;maxNumberStudent) {
+			setTakeAble(true);
+			return true;
+		}else {
+			setTakeAble(false);
+			return(false);
+		}
+	}
+	
+	public void incrementCurrentNumberOfStudent() {
+		this.currentNumberOfStudent++;
+	}
+
+
+	public void setCurrentNumberOfStudent(int currentNumberOfStudent) {
+		this.currentNumberOfStudent = currentNumberOfStudent;
+	}
+	
+	
+	
+}
+</programlisting>
+        <para>Student class képes tárgyat felvenni (ezáltal változást is tud okozni a Lessen-ben ez
+            felvethet némi problémát)</para>
+        <programlisting>package targyfelvetel;
+
+import java.util.Map;
+
+public class Student extends NeptunEntity {
+	
+	
+	LinkidMap&lt;Integer,String >takenLessen;
+	int numberOfTakenLessen;
+	
+	private Student(String neptunCode, String name) {
+		super(neptunCode, name);
+		this.takenLessen = new LinkidMap&lt;>();
+		numberOfTakenLessen =0;
+	}
+	
+	public static Student getANewStudent(String neptunCode, String name) {
+		Student currentStudent =new Student(neptunCode, name);
+		return currentStudent;
+	}
+
+
+	public  String takeLesson(Map&lt;String,Lessen> lessens,String lesenCode) {
+		
+		if (lessens.containsKey(lesenCode)) {
+			Lessen currentLessen;
+			currentLessen=lessens.get(lesenCode);
+			if (currentLessen.chekTakeAble()) {
+				setNumberOfTakenLessen(getNumberOfTakenLessen()+1);
+				currentLessen.incrementCurrentNumberOfStudent();
+				takenLessen.put(this.numberOfTakenLessen, lesenCode);
+				return lesenCode;
+			}
+		}
+		
+		
+		return null;
+	}
+
+
+	public LinkidMap&lt;Integer, String> getTakenLessen() {
+		return takenLessen;
+	}
+
+
+	public void setTakenLessen(LinkidMap&lt;Integer, String> takenLessen) {
+		this.takenLessen = takenLessen;
+	}
+
+
+	public int getNumberOfTakenLessen() {
+		return numberOfTakenLessen;
+	}
+
+
+	public void setNumberOfTakenLessen(int numberOfTakenLessen) {
+		this.numberOfTakenLessen = numberOfTakenLessen;
+	}
+	
+	
+
+}
+</programlisting>
+        <para>A neptun class ban vannak tárolva az órák és a hallgatók és itt tudjuk őket létre
+            hozzni</para>
+        <programlisting>package targyfelvetel;
+
+public class Neptun {
+
+		LinkidMap&lt;String, Lessen> lessens = new LinkidMap&lt;>();
+		LinkidMap&lt;String, Student> students = new LinkidMap&lt;String, Student>();
+		
+		public Neptun() {
+			
+			
+		}
+		
+		public void AddAStudent(String neptunCode,String name) {
+			students.put(neptunCode,Student.getANewStudent( neptunCode, name));
+		}
+		
+		public void AddALessen(String neptunCode,String name, int maxNumberStudent) {
+			Lessen.getANewLessen(lessens, neptunCode, name, maxNumberStudent);
+		}
+		
+}
+</programlisting>
+        <para>EPAM:OO modellezés</para>
+        <para>SOLID</para>
+        <itemizedlist>
+            <listitem>
+                <para>Single-responsibility principle</para>
+                <para>Egy osztálynak csak egyetlen felelőssége kell, hogy legyen, vagyis a szoftver
+                    specifikációjának csak egy részén végzett változtatások befolyásolhatják az
+                    osztály specifikációját. </para>
+            </listitem>
+            <listitem>
+                <para>Open–closed principle</para>
+                <para>A szoftvereknek nyitva kell lenniük a kiterjesztésre, de módosításra
+                    bezárva.</para>
+            </listitem>
+            <listitem>
+                <para>Liskov substitution principle</para>
+                <para>Egy objektumot bármikor helyettesíthet egy all osztálya az adott
+                    objektumnak</para>
+            </listitem>
+            <listitem>
+                <para>Interface segregation principle</para>
+                <para>Jobb mindenre külön külön interface csinálni ,mint egy univerzálisat
+                    használni</para>
+            </listitem>
+            <listitem>
+                <para>Dependency inversion principle</para>
+                <para>Az absztrakciónak kell az alapját szolgálnia a programoknak nem konkréttan
+                    megírt kódok</para>
+            </listitem>
+        </itemizedlist>
+        <para>KISS</para>
+        <para>A KISS (keep it stupid simple/keep it simple, soldier) elv szerint a legtöbb rendszer
+            akkor működik a legjobban, ha egyszerűbbé teszik, nem pedig bonyolulttá teszik őket;
+            ezért a tervezésnél az egyszerűségnek kell kulcsfontosságúnak lennie, és kerülni kell a
+            felesleges bonyolítást.</para>
+        <para>DRY</para>
+        <para>Don't repeat yourself</para>
+        <para>Minden információnak egy elfordulásának kell hogy legyen a rendszerben (kétszer ugyan
+            azt a a kódot felesleges megírni csak hibaforrás lesz)</para>
+        <para>YAGIN</para>
+        <para>You ain't gonna need it</para>
+        <para> Addig nem kell létre hozni egy függvény míg nincs rá szükséged még akkor se ha azt
+            sejted hogy szükséged lesz rá</para>
+    </section>
+    <section>
+        <title>4.hét</title>
+        <para>EPAM: Order of everything</para>
+        <para>EPAM: Bináris keresés és Buborék rendezés
+            implementálása<programlisting>package IntegerStorage;
+
+import java.util.Arrays;
+
+public class IntegerStorage {
+	private int[] storage;
+	private int index = 0;
+
+	public IntegerStorage(int size) {
+		super();
+		this.storage = new int[size];
+	}
+	
+	public IntegerStorage(int[] storage) {
+		super();
+		this.storage = storage;
+		this.index=storage.length;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + Arrays.hashCode(storage);
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		IntegerStorage other = (IntegerStorage) obj;
+		if (!Arrays.equals(storage, other.storage))
+			return false;
+		return true;
+	}
+
+	@Override
+	public String toString() {
+		return "IntegerStorage [storage=" + Arrays.toString(storage) + "]";
+	}
+	
+	public void add(Integer value) {
+		storage[index++]=value;
+	}
+
+	
+	public boolean contains(Integer value) {
+		int l=0;
+		int r=index;
+		
+		while ((r>=l) &amp;&amp; (value!=storage[(r+l)/2])) {
+			if (value&lt;storage[(r+l)/2]) {
+				r=(l+r)/2;
+			}else {
+				l=(l+r)/2;
+			}
+		}
+		
+		if (r>=l) {
+			return true;
+		}else {
+			return false;
+		}			
+	}
+	
+	public int[] sort() {
+		
+		for(int i=0; i&lt;index-1; i++) {
+			for(int j=i+1; j&lt;index; j++) {
+				if (storage[i]>storage[j]) { 
+					int s;
+					s=storage[j];
+					storage[j]=storage[i];
+					storage[i]=s;
+					
+				}
+			}
+		}
+		return storage;
+	}
+
+}
+</programlisting></para>
+        <para>EPAM: Saját HashMap implementáció</para>
+        <para>Egy Hash map kialakításához egty ArrayList-et használtam melybe Map-eket hoztam létre
+            (ez a saját magam által meg írt linkedmap volt)ez álltan láncolt listával oldom meg az
+            ugyan olyan hash kódú elemek tárolását de igazából a HashMap szempontjából/működéséből
+            következően annak nincs jelentősége hogy milyen mappal lesz ez megoldva.</para>
+        <programlisting>package sajatHasMap;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+import java.util.Map.Entry;
+
+
+
+public class HashMap2&lt;K,V> implements Map&lt;K, V> {
+
+	private final int  PRIME=7;
+	ArrayList&lt;LinkidMap&lt;K,V>> rows;
+	int size;
+	
+	private int hash(Object key) {
+		int result;
+		result =key.hashCode() % PRIME;
+		
+		return result; 
+	}
+	
+	
+	
+	
+	
+	public HashMap2() {
+		super();
+		this.rows = new ArrayList&lt;LinkidMap&lt;K,V>>(PRIME);
+		for(int index=0; index&lt;PRIME; index++) {
+			rows.add(new LinkidMap&lt;K,V>());
+		}
+		this.size = 0;
+	}
+
+
+
+
+
+	@Override
+	public int size() {
+		// TODO Auto-generated method stub
+		size=0;
+		for(int index=0; index&lt;PRIME; index++) {
+			size+=rows.get(index).size();
+		}
+		return size;
+	}
+
+	@Override
+	public boolean isEmpty() {
+		// TODO Auto-generated method stub
+		
+		for (int index=0; index&lt;PRIME; index++) {
+			if(! rows.get(index).isEmpty())
+				return false;
+		}
+		
+		return true; 
+	}
+
+	@Override
+	public boolean containsKey(Object key) {
+		// TODO Auto-generated method stub
+		
+		int index= hash(key);
+		return rows.get(index).containsKey(key);
+	
+	}
+
+	@Override
+	public boolean containsValue(Object value) {
+		// TODO Auto-generated method stub
+		for(int index=0; index&lt;PRIME;index++) 
+			if (rows.get(index).containsValue(value))
+				return true;
+		return false;
+	}
+
+	@Override
+	public V get(Object key) {
+		// TODO Auto-generated method stub
+		int index= hash(key);
+		return rows.get(index).get(key);
+	}
+
+	@Override
+	public V put(K key, V value) {
+		// TODO Auto-generated method stub
+		int index= hash(key);
+		return rows.get(index).put(key, value);
+	}
+
+	@Override
+	public V remove(Object key) {
+		// TODO Auto-generated method stub
+		int index= hash(key);
+		return rows.get(index).remove(key);
+	}
+
+	@Override
+	public void putAll(Map&lt;? extends K, ? extends V> m) {
+		// TODO Auto-generated method stub
+		Set&lt;? extends K> keys = m.keySet();	
+		for ( K key:keys) {
+			this.put(key, m.get(key));			
+		}
+		
+	}
+
+	@Override
+	public void clear() {
+		// TODO Auto-generated method stub
+		for (int index=0; index&lt;PRIME; index++)
+			rows.get(index).clear();
+	}
+
+	@Override
+	public Set&lt;K> keySet() {
+		// TODO Auto-generated method stub
+		Set&lt;K> keys =  new HashSet&lt;K>();
+		for (int index=0; index&lt;PRIME; index++)
+			keys.addAll(rows.get(index).keySet());
+		return keys;
+	}
+
+	@Override
+	public Collection&lt;V> values() {
+		// TODO Auto-generated method stub
+		Collection&lt;V> collection =new ArrayList&lt;>();
+		for (int index=0; index&lt;PRIME; index++)
+			collection.addAll(rows.get(index).values());
+		return collection;
+	}
+
+	@Override
+	public Set&lt;Entry&lt;K, V>> entrySet() {
+		// TODO Auto-generated method stub
+		Set&lt;Entry&lt;K, V>> result = new HashSet&lt;>();
+		for (int index=0; index&lt;PRIME; index++)
+			result.addAll(rows.get(index).entrySet());
+		return result;
+	}
+
+}
+</programlisting>
+        <programlisting>package sajatHasMap;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Map;
+import java.util.Set;
+import java.util.HashSet;
+
+public class LinkidMap&lt;K, V> implements Map&lt;K,V> {
+
+	private Node&lt;K, V> root;
+	
+	public LinkidMap() {
+		root = null;
+	}
+	
+	private static class Node&lt;K,V> implements Map.Entry&lt;K, V>{
+		
+		private K key;
+		private V value;
+		private Node&lt;K, V> next;
+		
+		public Node(K key, V value, Node&lt;K, V> next) {
+			super();
+			this.key = key;
+			this.value = value;
+			this.next = next;
+		} 
+		
+		 @Override
+		public String toString() {
+			// TODO Auto-generated method stub
+			
+			 String string ="Key: "+ getKey() +" "+ "Value: "+ getValue() ;
+			 
+			 return string; 
+		}
+		
+		@Override
+		public int hashCode() {
+			final int prime = 31;
+			int result = 1;
+			result = prime * result + ((key == null) ? 0 : key.hashCode());
+			result = prime * result + ((value == null) ? 0 : value.hashCode());
+			return result;
+		}
+
+		@Override
+		public boolean equals(Object obj) {
+			if (this == obj)
+				return true;
+			if (obj == null)
+				return false;
+			if (getClass() != obj.getClass())
+				return false;
+			Node&lt;K,V> other = (Node&lt;K,V>) obj;
+			if (key == null) {
+				if (other.key != null)
+					return false;
+			} else if (!key.equals(other.key))
+				return false;
+			if (value == null) {
+				if (other.value != null)
+					return false;
+			} else if (!value.equals(other.value))
+				return false;
+			return true;
+		}
+	
+		public K getKey() {
+			return key;
+		}
+
+		public void setKey(K key) {
+			this.key = key;
+		}
+
+		public V getValue() {
+			return value;
+		}
+
+		public V setValue(V value) {
+			this.value = value;
+			return  value;
+		}
+
+		public Node&lt;K, V> getNext() {
+			return next;
+		}
+
+		public void setNext(Node&lt;K, V> next) {
+			this.next = next;
+		}
+			
+	}
+	
+	@Override
+	public String toString() {
+		Node&lt;K,V> currentNode = root;
+		String string="LinkidMap [root]" ;
+		while (currentNode != null) {
+			string= string +" "+ currentNode.toString();
+			currentNode=currentNode.getNext();
+		}
+		return string;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		Node&lt;K,V> current=root;
+		while(current != null) {
+			result = result +current.hashCode();
+			current=current.next;
+		}
+		result = prime * result;
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		LinkidMap&lt;K,V> other = (LinkidMap) obj;
+		if (root == null) {
+			if (other.root != null)
+				return false;
+		} else {
+			if (other.root == root)
+				return true;//Ezz nincs tesztelve elméletileg nem is lehetne ilyen eset maximum a node setNext()-jével Null nál true-t add vissza
+			if (this.root.key.getClass() != other.root.key.getClass())
+				return false;
+			if (this.root.value.getClass() != other.root.value.getClass())
+				return false;
+			Node&lt;K, V> current =root ;
+			Node&lt;K, V> otherCurrent =other.root;
+			boolean isItEquals = true; 
+			while ((current.next != null)&amp;&amp;(otherCurrent.next != null) &amp;&amp; isItEquals) {
+				isItEquals = current.equals(otherCurrent);
+				current = current.next;
+				otherCurrent =otherCurrent.next;
+			}
+			if ((current.next == null) &amp;&amp; (otherCurrent.next != null) || ((current.next != null) &amp;&amp; (otherCurrent.next == null) ) )
+				return false;
+			if (!isItEquals)
+				return false;
+		}
+			
+		return true;
+	}
+
+	@Override
+	public int size() {
+		int size = 0;	
+		Node&lt;K,V> node =root;
+		while (node != null) {
+			
+			node=node.getNext();
+			size++;
+			
+		}
+		return size;
+	}
+
+	@Override
+	public boolean isEmpty() {
+		
+		if (root == null)
+			return true;
+		
+		return false;
+	}
+
+	@Override
+	public boolean containsKey(Object key) {
+		// TODO Auto-generated method stub
+		Node&lt;K,V> node =root;
+		while (node != null) {
+			if (node.getKey() == key) {
+				return true;
+			}else {
+				node=node.getNext();
+			}
+		}
+		
+		return false;
+	}
+
+	@Override
+	public boolean containsValue(Object value) {
+		// TODO Auto-generated method stub
+		
+		Node&lt;K,V> node =root;
+		while (node != null) {
+			if (node.getValue() == value) {
+				return true;
+			}else {
+				node=node.getNext();
+			}
+		}
+		
+		return false;
+	}
+
+	@Override
+	public V get(Object key) {
+		// TODO
+		
+		Node&lt;K,V> node =root;
+		while (node != null) {
+			if (node.getKey() == key) {
+				return node.getValue();
+			}else {
+				node=node.getNext();
+			}	
+		}
+		
+		return null;
+	}
+
+	@Override
+	public V put(K key, V value) {
+		// TODO Auto-generated method stub
+		if (!containsKey(key)) {
+		Node&lt;K, V> node =new Node&lt;>(key,value,root);
+		root = node;
+		return value;
+		}else {
+			return null;
+		}
+	}
+
+	@Override
+	public V remove(Object key) {
+		// TODO Auto-generated method stub első elem???
+		Node&lt;K,V> befor =root;
+		Node&lt;K,V> current=root;
+		
+		while (current != null) {
+			if (current.getKey() == key) {
+				befor.setNext(current.getNext());
+				return current.getValue();
+			} else {
+				befor=current;
+				current=current.getNext();
+			}
+			
+		}
+		
+		return null;
+	}
+
+	@Override
+	public void putAll(Map&lt;? extends K, ? extends V> m) {
+		// TODO Auto-generated method stub
+		//Sorendet nem tartja
+		
+		Set&lt;? extends K> keys = m.keySet();	
+		for ( K key:keys) {
+			this.put(key, m.get(key));			
+		}
+				
+	}
+
+	@Override
+	public void clear() {
+		// TODO Auto-generated method stub
+		root=null;
+	}
+
+	@Override
+	public Set&lt;K> keySet() {
+		// TODO Auto-generated method stub
+		Set&lt;K> keys =  new HashSet&lt;K>();
+		Node&lt;K,V> currentNode =root;
+		
+		while (currentNode != null) {
+			keys.add(currentNode.getKey());
+			currentNode = currentNode.getNext();
+		}
+		
+		return keys;
+	}
+
+	@Override
+	public Collection&lt;V> values() {
+		// TODO Auto-generated method stub
+		
+		Node&lt;K,V> currentNode =root;
+		Collection&lt;V> collection =new ArrayList&lt;>();
+		while (currentNode != null) {
+			collection.add(currentNode.getValue());
+			currentNode=currentNode.getNext();
+		}
+		return collection;
+	}
+
+	@Override
+	public Set&lt;Entry&lt;K, V>> entrySet() {
+		// TODO Auto-generated method stub
+		Set&lt;Entry&lt;K, V>> result = new HashSet&lt;>();
+		Node&lt;K,V> currentNode =root;
+		while (currentNode != null) {
+			result.add(currentNode);
+			currentNode=currentNode.getNext();
+		}
+		
+        return result;
+	}
+}</programlisting>
     </section>    
   
   <section>
