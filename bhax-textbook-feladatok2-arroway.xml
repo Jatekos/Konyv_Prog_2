@@ -788,6 +788,71 @@ public class Neptun {
     <section>
         <title>4.hét</title>
         <para>EPAM: Order of everything</para>
+		<programlisting>package com.epam.training;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
+
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+import org.testng.annotations.DataProvider;
+import org.testng.annotations.Test;
+
+/**
+ * # Order of everything
+ *
+ * Collection-ok rendezĂ©se esetĂ©n jellemzĹ‘en futĂˇsi idĹ‘ben derĂĽl ki,
+ * ha olyan tĂ­pusĂş objektumokat prĂłbĂˇlunk rendezni, amelyeken az Ă¶sszehasonlĂ­tĂˇs
+ * nem Ă©rtelmezett (azaz `T` tĂ­pus esetĂ©n nem implementĂˇljĂˇk a `Comparable&lt;T>` interface-t).
+ * Pl. ClassCastException a [Collections.sort()](https://docs.oracle.com/javase/7/docs/api/java/util/Collections.html#sort(java.util.List)) esetĂ©ben,
+ * vagy ClassCastException a [Stream.sorted()](https://docs.oracle.com/javase/8/docs/api/java/util/stream/Stream.html#sorted--) esetĂ©ben.
+ *
+ * ĂŤrj olyan metĂłdust, amely tetszĹ‘leges Collection esetĂ©n vissza adja az elemeket
+ * egy List-ben nĂ¶vekvĹ‘en rendezve, amennyiben az elemek Ă¶sszehasonlĂ­thatĂłak velĂĽk azonos tĂ­pusĂş objektumokkal.
+ * Ha ez a feltĂ©tel nem teljesĂĽl, az eredmĂ©nyezzen syntax error-t.
+ *
+ * PĂ©ldĂˇul:
+ * ```
+ *     List&lt;Integer> actualOutput = createOrderedList(input);
+ * ```
+ * Ahol az `input` `Collection&lt;Integer>` tĂ­pusĂş. TermĂ©szetesen mĂˇs tĂ­pusokkal is mĹ±kĂ¶dnie kell,
+ * feltĂ©ve, hogy implementĂˇljĂˇk a Comparable interface-t.
+ */
+public class OrderOfEverythingTest {
+
+    @Test(dataProvider = "collectionsToSortDataProvider")
+    public void testOrderShouldReturnExpectedListWhenCollectionIsPassed(Collection&lt;Integer> input, List&lt;Integer> expectedOutput) {
+        // Given as parameters
+
+        // When
+        // createOrderedList(List.of(new OrderOfEverythingTest()));
+        // ^ ez piros, az OrderOfEverythingTest nem implementĂˇlja a Comparable&lt;OrderOfEverythingTest> -et
+        List&lt;Integer> actualOutput = createOrderedList(input);
+
+        // Then
+        assertThat(actualOutput, equalTo(expectedOutput));
+    }
+
+    @DataProvider
+    private Object[][] collectionsToSortDataProvider() {
+        return new Object[][] {
+            {Collections.emptySet(), Collections.emptyList()},
+            {Set.of(1), List.of(1)},
+            {Set.of(2,1), List.of(1,2)}
+        };
+    }
+
+    private &lt;T extends Comparable&lt;T>> List&lt;T> createOrderedList(Collection&lt;T> input) {
+        return input.stream()
+            .sorted()
+            .collect(Collectors.toList());
+    }
+}
+</programlisting>
         <para>EPAM: Bináris keresés és Buborék rendezés
             implementálása<programlisting>package IntegerStorage;
 
