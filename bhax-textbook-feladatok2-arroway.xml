@@ -1410,7 +1410,100 @@ public class LinkidMap&lt;K, V> implements Map&lt;K,V> {
         return result;
 	}
 }</programlisting>
-    </section>    
+    </section>
+	<section>
+		<title>5. hét</title>
+		<para>EPAM: It's gone. Or is it?</para>
+		<para>
+			<programlisting>public class BugousStuffProducer {
+	private final Writer writer;
+
+	public BugousStuffProducer(String outputFileName) throws IOException {
+		writer = new FileWriter(outputFileName);
+	}
+
+	public void writeStuff() throws IOException {
+		writer.write("Stuff");
+	}
+
+	@Override
+	public void finalize() throws IOException {
+		writer.close();
+	}
+}
+</programlisting>
+		</para>
+		<para>Ha csak a writeStuff() eljárást hívjuk meg és a finalize()-t nem hívódik meg a program
+			vége előtt akkor nem fog ki íródni a file-ba a bele írt szöveg.  A lapból a garbage
+			collector hívja a finalize()-t de amíg ez nem történik meg nem záródik le a file egyes
+			esetekben még a program le futása végén se hívódik meg.</para>
+		<para>EPAM: Kind of equal</para>
+		<programlisting>// Given
+	String first = "...";
+	String second = "...";
+	String third = new String("...");
+	// When
+	boolean firstMatchesSecondWithEquals = first.equals(second);
+	boolean firstMatchesSecondWithEqualToOperator = first == second;
+	boolean firstMatchesThirdWithEquals = first.equals(third);
+	boolean firstMatchesThirdWithEqualToOperator = first == third;
+</programlisting>
+		<para>A JVM optimalizációs célból fent tart egy string pool-t. Ha literálként hozzuk létre a
+			string-et akkor először végig nézi a pool-ban hogy már létezik e az adott string ha igen
+			akkor csak az adott string referenciájával tér vissza ha nem létezik létre hozza és bele
+			rakja a pool-ba.</para>
+		<para>Ezzel szembe ha a new operátorral végezzük ell a string létrehozását akkor mindig egy
+			új objektum jön létre.</para>
+		<para>Ebből következik az is hogy a first==second az true-val tér vissza mert ténylegesen
+			ugyan azt az objektumot kapták meg a JVM-től, míg a Third.-nél új objektum jött létre
+			ugyan azzal a tartalommal</para>
+		<para>EPAM: Java GC</para>
+		<para>Serial Garbage Collector</para>
+		<para>Ez a GC legegyszerűbb megvalósítása. Alapvetően egyszálas környezetre tervezték. Ez a
+			GC megvalósítás fagyasztja az összes alkalmazásszálat, amikor fut. Egyetlen szálat
+			használ a garbage collection-höz. Ezért nem jó ötlet több szálon futó alkalmazásokban
+			használni, például szerver környezetben.</para>
+		<para>Parallel Garbage Collector</para>
+		<para>Ez a GC a z előzővel ellentétben több szálon fut de ugyan úgy meg állítja az
+			alkalmazást mint az előző. Be alíthatjuk a szálak számát, az rendelkezésére álló időt,
+			maximum throughput-ot és a maximum heap footprintet.</para>
+		<para>CMS Garbage Collector</para>
+		<para>Az előzőhöz hasonlóan több szálat használ. Megkeresi é meg jelöli a heap memory-ban a
+			törlendő objektumokat majd ki törli őket. olyan alkalmazásoknál célszerű használni
+			melyek több kisebb meg állást preferálnak egy hosszabb helyet és képesek CPU időt
+			biztositani a GC-nek.</para>
+		<para>G1 Garbage Collector</para>
+		<para>Arra tervezték hogy több CPU-s környezetbn nagy memória terület mellet dolgozzon jól.
+			Felosztja egyenlő részekre a memóriát és párhuzamosan gyűjt belőlük. Kettő fázisa van
+			Marking és Sweeping. Mindig annál a memória résznél kezdi a gyűjtést ami a leginkább
+			üres </para>
+		<para>Epsilon Garbage Collector</para>
+		<para>Lefoglalja a memóriát a programnak de nem gyűjt szemetet ha tesztelni akarjuk a
+			programot hogy menyi memóriát használ egy jóeszköz vagy ha ki akarjuk sajtolni a legjobb
+			teljesítményt az adott programból. </para>
+		<para>Z garbage collector</para>
+		<para>A ZGC minden költséges munkát egyidejűleg végez, anélkül, hogy 10 ms-nál hosszabb
+			időre leállítaná az alkalmazásszálak végrehajtását, ami alkalmassá teszi alacsony
+			késleltetést igénylő alkalmazásokhoz és / vagy nagyon nagy heap memorit használó
+			alkalmazásokhoz. Az Oracle dokumentációja szerint több terabájtos memóriát képes
+			kezelni. A Z szemétgyűjtő a szálaiban végzi ciklusait. Átlagosan 1 ms-ig szünetelteti az
+			alkalmazást. A G1 és a Parallel kollektorok átlagosan nagyjából 200 ms-ot tesznek
+			ki.</para>
+		<para>Shenandoah Garbage Collector</para>
+		<para>Shenandoah memóriaterületeket használ annak kezelésére, hogy mely objektumok már
+			nincsenek használatban, melyek élnek és készek a tömörítésre. Shenandoah emellett
+			továbbít mutatót minden kupac objektumhoz, és az objektumhoz való hozzáférés
+			ellenőrzésére használja. Shenandoah tervezése párhuzamos CPU-ciklusokat és helyet
+			biztosít a szünetidő javítására. A továbbító mutató megkönnyíti az objektumok
+			mozgatását, de az agresszív mozgások azt jelentik, hogy Shenandoah több memóriát
+			használ, és több párhuzamos munkát igényel, mint más GC-k. De a rendkívüli munkát a
+			világ rövid megállásaival végzi.</para>
+		<para>out of memory</para>
+		<para>Lehetséges ha elkapjuk az errot valahol és tudunk felszabadítani memóriát de nem
+			lehetünk benne biztosak hogy a JVM milyen álapotban van éppen és menyire tudjuk vissza
+			álitani. Jobb eljárás lenne inkább csak meg próbálni lezárni az erőforrásokat esetleg ki
+			loggolni a hibát kiváltó tényzőket</para>
+	</section>    
   
   <section>
         <title>Java osztályok a Pi-ben</title>
