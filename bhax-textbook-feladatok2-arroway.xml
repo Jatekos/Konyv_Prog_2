@@ -1503,6 +1503,87 @@ public class LinkidMap&lt;K, V> implements Map&lt;K,V> {
 			lehetünk benne biztosak hogy a JVM milyen álapotban van éppen és menyire tudjuk vissza
 			álitani. Jobb eljárás lenne inkább csak meg próbálni lezárni az erőforrásokat esetleg ki
 			loggolni a hibát kiváltó tényzőket</para>
+	</section>
+	<section>
+		<title>6. hét</title>
+		<para>EPAM:  Mátrix szorzás Stream API val</para>
+		<programlisting>public static int[][] matrixszorzas(int[][] a, int[][] b) {
+
+		if (a[0].length == b.length) {
+			int bNumberOfCloumns = b[0].length; // oszlopok száma
+			int bNumberOfRows = b.length; // szorzások száma
+
+			int[][] c = Arrays.stream(a)// c.length-szer fut le
+					.map(r -> IntStream.range(0, bNumberOfCloumns)
+							.map(i -> IntStream.range(0, bNumberOfRows).map(j -> r[j] * b[j][i]).sum()).toArray())
+					.toArray(int[][]::new);
+			return c;
+		} else {
+
+			return null;
+		}
+	}</programlisting>
+		<para>Egy m × t-s A és egy t × nes B mátrix szorzatán azt az AB-vel jelölt m × n-es C
+			mátrixot értjük,</para>
+		<para>A mátrix i-edik sorának és a B mátrix j-edik oszlopának skaláris szorzata, azaz cij =
+			ai∗ · b∗j .</para>
+		<para>EPAM: Refactoring</para>
+		<programlisting>public class LegacyRefactoring {
+	private Calculator creatCalculators() {
+		return number -> number * number;
+	}
+
+	private Runnable creatRunnable() {
+		return () -> System.out.println("Runnable!");
+	}
+	
+	private  Consumer&lt;Integer> creatConsumer()  {
+		return number -> System.out.println(number);
+				
+	}
+
+	public void legacy() {
+
+		Runnable runnable = creatRunnable();
+		runnable.run();
+
+		Calculator calculator = creatCalculators();
+
+		Integer result = calculator.calculate(3);
+		System.out.println("Calculation result: " + result);
+
+		List&lt;Integer> inputNumbers = Arrays.asList(1, null, 3, null, 5);
+		List&lt;Integer> resultNumbers = new ArrayList&lt;>();
+		resultNumbers = inputNumbers.stream()
+				.filter(x -> x != null)
+				.map(x -> calculator.calculate(x))
+				.collect(Collectors.toList());
+
+		Consumer&lt;Integer> method =creatConsumer();
+		System.out.println("Result numbers: ");
+		resultNumbers.forEach(method);
+
+		Formatter formatter = creatFormatter();
+		
+		System.out.println("Formatted numbers: " + formatter.format(resultNumbers));
+	}
+	
+	private Formatter creatFormatter() {
+		return numbers -> numbers.stream()
+				.map(x -> String.valueOf(x))
+				.collect(Collectors.joining());
+	}</programlisting>
+		<para>EPAM: LinkedList vs ArrayList</para>
+		<para>LinkidListet </para>
+		<para>LinkidList-tet akkor érdemes használni ha gyorsan változik a tárolt adatok mennyisége
+			vagy sok törlés beszúrás történik ellenben a gyors hozzáférést nem támogatja végig kel
+			menni az egész láncon a keresendő elemig ezzel szemben az arrayList-nél közvetlen
+			hozzáférést biztosit így gyorsabb az adattok olvasása de ha törlünk akkor vagy
+			"lyukakat" hagyunk a memóriában vagy átlagosan az elemek felét másolnunk kell. Ha pedig
+			bővítjük a listát és ki futunk az előzetesen lefoglalt területből akkor a teljes listát
+			új helyre kell másolni. Akkor érdemes használni ha előre tudjuk a tárolni kívánt adatok
+			mennyiséget (ilyenkor már a konstruktorban meg adható a tárolandó elemek száma) vagy
+			fontosabb az adatok gyors elérése.</para>
 	</section>    
   
   <section>
