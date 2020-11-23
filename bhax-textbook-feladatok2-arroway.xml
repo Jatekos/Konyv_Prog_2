@@ -853,7 +853,7 @@ public class OrderOfEverythingTest {
 }
 </programlisting>
         <para>EPAM: Bináris keresés és Buborék rendezés
-            implementálása<programlisting>package IntegerStorage;
+			implementálása<programlisting>package IntegerStorage;
 
 import java.util.Arrays;
 
@@ -865,11 +865,11 @@ public class IntegerStorage {
 		super();
 		this.storage = new int[size];
 	}
-	
+
 	public IntegerStorage(int[] storage) {
 		super();
 		this.storage = storage;
-		this.index=storage.length;
+		this.index = storage.length;
 	}
 
 	@Override
@@ -898,49 +898,54 @@ public class IntegerStorage {
 	public String toString() {
 		return "IntegerStorage [storage=" + Arrays.toString(storage) + "]";
 	}
-	
+
 	public void add(Integer value) {
-		storage[index++]=value;
+		storage[index++] = value;
 	}
 
-	
 	public boolean contains(Integer value) {
-		int l=0;
-		int r=index;
-		
-		while ((r>=l) &amp;&amp; (value!=storage[(r+l)/2])) {
-			if (value&lt;storage[(r+l)/2]) {
-				r=(l+r)/2;
-			}else {
-				l=(l+r)/2;
-			}
-		}
-		
-		if (r>=l) {
-			return true;
-		}else {
-			return false;
-		}			
+		int u = 0;
+		int v = index-1;
+		boolean l = false;
+
+		sort();
+
+		while ((l == false) &amp;&amp; (u &lt;= v)) {
+			int i=(u+v)/2;
+			            
+			if (storage[i]==value)
+				l =true;
+			
+			if(storage[i]&lt;value)   
+				u=i+1;
+			
+			if(storage[i]>value)
+				v=i-1;
+			
+		}  
+
+		return l;
+
 	}
-	
+
 	public int[] sort() {
-		
-		for(int i=0; i&lt;index-1; i++) {
-			for(int j=i+1; j&lt;index; j++) {
-				if (storage[i]>storage[j]) { 
+
+		for (int i = index - 1; i >= 0; i--) {
+			for (int j = 0; j &lt; i; j++) {
+				if (storage[j] > storage[i]) {
 					int s;
-					s=storage[j];
-					storage[j]=storage[i];
-					storage[i]=s;
-					
+					s = storage[j];
+					storage[j] = storage[i];
+					storage[i] = s;
 				}
 			}
+
 		}
+
 		return storage;
 	}
 
-}
-</programlisting></para>
+}</programlisting></para>
         <para>EPAM: Saját HashMap implementáció</para>
         <para>Egy Hash map kialakításához egty ArrayList-et használtam melybe Map-eket hoztam létre
             (ez a saját magam által meg írt linkedmap volt)ez álltan láncolt listával oldom meg az
@@ -1436,6 +1441,8 @@ public class LinkidMap&lt;K, V> implements Map&lt;K,V> {
 			vége előtt akkor nem fog ki íródni a file-ba a bele írt szöveg.  A lapból a garbage
 			collector hívja a finalize()-t de amíg ez nem történik meg nem záródik le a file egyes
 			esetekben még a program le futása végén se hívódik meg.</para>
+		<para>Erre egy megoldást jelenthet ha implementálja az adott osztály az AutoCloseable
+			interface-t és annak a close metódusában zárja le a filet.</para>
 		<para>EPAM: Kind of equal</para>
 		<programlisting>// Given
 	String first = "...";
@@ -1583,6 +1590,93 @@ public class LinkidMap&lt;K, V> implements Map&lt;K,V> {
 			új helyre kell másolni. Akkor érdemes használni ha előre tudjuk a tárolni kívánt adatok
 			mennyiséget (ilyenkor már a konstruktorban meg adható a tárolandó elemek száma) vagy
 			fontosabb az adatok gyors elérése.</para>
+		<programlisting>package linkidlistvsarraylist;
+
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+
+public class Main {
+	 
+
+	static final int NUMBER_OF_ELEMET=200000;
+
+	static void addingElementsToArrayList() {
+		List&lt;Integer> list = new ArrayList&lt;>();
+		long time = System.currentTimeMillis();
+		for (int i = 0; i &lt; NUMBER_OF_ELEMET; i++)
+			list.add(i);
+		System.out.println("Adding "+NUMBER_OF_ELEMET +" elemet to arrayList: " + (System.currentTimeMillis() - time));
+	}
+	static void removeElementFromArrayList() {
+		List&lt;Integer> list = new ArrayList&lt;>();
+		for (int i = 0; i &lt; NUMBER_OF_ELEMET; i++)
+			list.add(i);
+		long time = System.currentTimeMillis();
+		while(list.size()!=0)
+			list.remove(list.size()/2);
+		System.out.println("Removing "+NUMBER_OF_ELEMET +" elemet from arrayList: " + (System.currentTimeMillis() - time));
+	}
+	
+	static void getElementFromArrayList() {
+		List&lt;Integer> list = new ArrayList&lt;>();
+		for (int i = 0; i &lt; NUMBER_OF_ELEMET; i++)
+			list.add(i);
+		long time = System.currentTimeMillis();
+		for (int i = 0; i &lt; NUMBER_OF_ELEMET; i++)
+			list.get(i);
+		System.out.println("Geting "+NUMBER_OF_ELEMET +" elemet from arrayList: " + (System.currentTimeMillis() - time));
+	}
+	
+	static void addingElementsToLinkedList() {
+		long time = System.currentTimeMillis(); 
+		List&lt;Integer> list = new LinkedList&lt;>();
+		for (int i = 0; i &lt; NUMBER_OF_ELEMET; i++)
+			list.add(i);
+		System.out.println("Adding "+NUMBER_OF_ELEMET +" elemet to LinkedList: " + (System.currentTimeMillis() - time));
+	}
+	
+	static void removeElementFromLinkedList() {
+		List&lt;Integer> list = new LinkedList&lt;>();
+		for (int i = 0; i &lt; NUMBER_OF_ELEMET; i++)
+			list.add(i);
+		long time = System.currentTimeMillis();
+		while(list.size()!=0)
+			list.remove(list.size()/2);
+		System.out.println("Removing "+NUMBER_OF_ELEMET +" elemet from LinkedList: " + (System.currentTimeMillis() - time));
+	}
+	
+	static void getElementFromLinkedList() {
+		List&lt;Integer> list = new LinkedList&lt;>();
+		for (int i = 0; i &lt; NUMBER_OF_ELEMET; i++)
+			list.add(i);
+		long time = System.currentTimeMillis();
+		for (int i = 0; i &lt; NUMBER_OF_ELEMET; i++)
+			list.get(i);
+		System.out.println("geting "+NUMBER_OF_ELEMET +" elemet from LinkedList: " + (System.currentTimeMillis() - time));
+	}
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+
+		addingElementsToArrayList();
+		addingElementsToLinkedList();
+		removeElementFromArrayList();
+		removeElementFromLinkedList();
+		getElementFromArrayList();
+		getElementFromLinkedList();
+	}
+
+}
+</programlisting>
+		<para>kimenet:</para>
+		<programlisting>Adding 200000 elemet to arrayList: 23
+Adding 200000 elemet to LinkedList: 26
+Removing 200000 elemet from arrayList: 1219
+Removing 200000 elemet from LinkedList: 31024
+Geting 200000 elemet from arrayList: 3
+geting 200000 elemet from LinkedList: 28911
+</programlisting>
 	</section>    
   
   <section>
