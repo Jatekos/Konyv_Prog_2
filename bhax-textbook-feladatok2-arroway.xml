@@ -109,9 +109,12 @@ Az objektum orientált nyelveknél könnyebb bővítés az öröklődésnek kös
         <para>
            Java Object metódusok :              
         </para>
-        <para>
-            protected Object clone(): Vissza tér egy másolatával az adott objektumnak. x.clone() != x igazat fog adni, x.clone().equals(x) igazat fog adni de ez nem elvárás a használathoz felül kel definiálni a protected miatt nem látszik.
-        </para>
+        <para> protected Object clone(): Vissza tér egy másolatával az adott objektumnak. x.clone()
+			!= x igazat fog adni, x.clone().equals(x) igazat fog adni de ez nem elvárás. A
+			használathoz felül kel definiálni, a protected miatt nem látszik. Ha az adot osztály nem
+			implementálja a cloneable interface-t akkor metódus hívása CloneNotSupportedException
+			fog okozni. Maga az interface nem tartalmazza a clone metódus törzsét ,így csak az
+			implementálása nem elegendő a metódus használatához. </para>
     <para>
             Boolean equals​(Object obj) : megalapítja hogy egy objectum egyenlő-e azzal amelyből hívjuk. Abban az esetben kell felüldefiniálni ezt a  metódust ha az adott objektum más objektumot is tartalmaz mer ebben az esetben az objektum == operátorral hasonlítja össze és így csak akkor ad igazat ha ugyan arra a helyre mutatnak. Abban az esetben ha felül definiáljuk a  equals() metódust a hasCode() metódust is illik felüldefiniálni mivel az egyenlő objectumoknak ugyan annak kell lenije a has kódjának.
         </para>
@@ -269,7 +272,7 @@ public class PolarGenerator {
 		
 		if (isStored) {
 			
-			isStored = !isStored;
+			isStored = false;
 			return stord; 
 			
 			
@@ -288,7 +291,7 @@ public class PolarGenerator {
 			
 			double r =Math.sqrt((-2 * Math.log(w)) / w);
 			stord=r * v2;
-			isStored = !isStored;
+			isStored = true;
 			return r*v1;
 						
 		}
@@ -393,9 +396,10 @@ Creating car!
 Creating supercar!
 Supercar is starting!
 true</programlisting>
-        <para>A firstVehicle létrehozásánál mivel Supercar-ból let létre hozva ezért lefut a
-            Vehicle a Car és a Supercar construktora is de mivel a firstVehicle  Car tipusu így csak
-            a Car metódusait éri el.</para>
+        <para>A firstVehicle létrehozásánál mivel Supercar-ból let létre hozva ezért lefut a Vehicle
+			a Car és a Supercar konstruktora is de mivel a firstVehicle Vehicle típusú így ezen a
+			változón nem érhetőek el sem a Car sem a Supercar azon metódusai amelyek nem egy Vehicle
+			belli metódust írnak felül.</para>
         <programlisting>Car secondVehicle = (Car) firstVehicle;
 secondVehicle.start();
 System.out.println(secondVehicle instanceof Supercar);
@@ -659,64 +663,59 @@ public class Lessen extends NeptunEntity{
 import java.util.Map;
 
 public class Student extends NeptunEntity {
-	
-	
-	LinkidMap&lt;Integer,String >takenLessen;
+
+	LinkidMap&lt;Integer, String> takenLessen;
 	int numberOfTakenLessen;
-	
+
 	private Student(String neptunCode, String name) {
 		super(neptunCode, name);
 		this.takenLessen = new LinkidMap&lt;>();
-		numberOfTakenLessen =0;
+		numberOfTakenLessen = 0;
 	}
-	
+
 	public static Student getANewStudent(String neptunCode, String name) {
-		Student currentStudent =new Student(neptunCode, name);
+		Student currentStudent = new Student(neptunCode, name);
 		return currentStudent;
 	}
 
+	public void takeLesson(Map&lt;String, Lessen> lessens, String lessenCode) throws Exception {
 
-	public  String takeLesson(Map&lt;String,Lessen> lessens,String lesenCode) {
-		
-		if (lessens.containsKey(lesenCode)) {
+		if (lessens.containsKey(lessenCode)) {
 			Lessen currentLessen;
-			currentLessen=lessens.get(lesenCode);
+			currentLessen = lessens.get(lessenCode);
 			if (currentLessen.chekTakeAble()) {
-				setNumberOfTakenLessen(getNumberOfTakenLessen()+1);
+				setNumberOfTakenLessen(getNumberOfTakenLessen() + 1);
 				currentLessen.incrementCurrentNumberOfStudent();
-				takenLessen.put(this.numberOfTakenLessen, lesenCode);
-				return lesenCode;
-			}
+				takenLessen.put(this.numberOfTakenLessen, lessenCode);
+				
+			}else {
+				throw new Exception("Lessen is not take able "+ lessenCode);
+				}
+			
+		} else {
+			throw new Exception("Lessen dosen' t exists "+ lessenCode);
 		}
-		
-		
-		return null;
-	}
 
+		
+	}
 
 	public LinkidMap&lt;Integer, String> getTakenLessen() {
 		return takenLessen;
 	}
 
-
 	public void setTakenLessen(LinkidMap&lt;Integer, String> takenLessen) {
 		this.takenLessen = takenLessen;
 	}
-
 
 	public int getNumberOfTakenLessen() {
 		return numberOfTakenLessen;
 	}
 
-
 	public void setNumberOfTakenLessen(int numberOfTakenLessen) {
 		this.numberOfTakenLessen = numberOfTakenLessen;
 	}
-	
-	
 
-}
-</programlisting>
+}</programlisting>
         <para>A neptun class ban vannak tárolva az órák és a hallgatók és itt tudjuk őket létre
             hozzni</para>
         <programlisting>package targyfelvetel;

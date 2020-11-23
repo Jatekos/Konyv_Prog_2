@@ -22,7 +22,7 @@ public class CsvRead {
 			lineSet.add(line);
 
 		}
-		
+		scanner.close();
 		return lineSet;
 	}
 
