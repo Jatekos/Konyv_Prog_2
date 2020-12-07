@@ -2732,6 +2732,10 @@ public aspect AccountAspect {
 	   
 }
 </programlisting></para>
+		<para>EPAM: Reaktív programozás</para>
+		<para><link
+				xlink:href="https://github.com/Jatekos/Konyv_Prog_2/tree/master/reactiv-ReactorCore"
+			/></para>
 	</section>    
   
   <section>
