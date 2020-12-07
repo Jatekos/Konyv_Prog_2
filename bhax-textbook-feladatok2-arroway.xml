@@ -2441,6 +2441,297 @@ Finally!</programlisting>
 		<para>Mivel null-lal let hívva így az ifben az else ágról fog dobódni egy RuntimeException
 			amit az utolsó catch kapja el ami kiírja második sort: exeption is caught!</para>
 		<para>Majd pedig lefut a finally is ami miatt kiíródik a:Finally!</para>
+	</section>
+	<section>
+		<title>9. hét</title>
+		<para>EPAM: Back To The Future </para>
+		<programlisting>package het9valami;
+
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+public class FutureChainingExercise {
+	private static ExecutorService executorService = Executors.newFixedThreadPool(2);
+	private static Logger LOGGER = LoggerFactory.getLogger(FutureChainingExercise.class);
+
+	public static void main(String[] args) {
+		long time=System.currentTimeMillis();
+		
+		CompletableFuture&lt;String> longTask = CompletableFuture.supplyAsync(() -> {
+			LOGGER.info("longTask is started at {}",System.currentTimeMillis()-time);
+			sleep(1000);
+			LOGGER.info("longTask is ready at {}",System.currentTimeMillis()-time);
+			return "Hello";
+		}, executorService);
+
+		CompletableFuture&lt;String> shortTask = CompletableFuture.supplyAsync(() -> {
+			LOGGER.info(" shortTask is started at {}",System.currentTimeMillis()-time);
+			sleep(500);
+			LOGGER.info(" shortTask is ready at {}",System.currentTimeMillis()-time);
+			return "Hi";
+		}, executorService);
+
+		CompletableFuture&lt;String> mediumTask = CompletableFuture.supplyAsync(() -> {
+			LOGGER.info("mediumTask is started at {}",System.currentTimeMillis()-time);
+			sleep(750);
+			LOGGER.info("mediumTask is ready at {}",System.currentTimeMillis()-time);
+			return "Hey";
+		}, executorService);
+		
+		LOGGER.info("Begining");
+		CompletableFuture&lt;String> result = longTask.applyToEitherAsync(shortTask, String::toUpperCase, executorService);
+		
+		
+		result = result.thenApply(s -> s + " World");
+
+		CompletableFuture&lt;Void> extraLongTask = CompletableFuture.supplyAsync(() -> {
+			LOGGER.info("extraLongTask is started at {}",System.currentTimeMillis()-time);
+			sleep(1500);
+			LOGGER.info("extraLongTask is ready at {}",System.currentTimeMillis()-time);
+			return null;
+		}, executorService);
+		result = result.thenCombineAsync(mediumTask, (s1, s2) -> s2 + ", " + s1, executorService);
+		LOGGER.info("firrst getNow at {}",System.currentTimeMillis()-time);
+		System.out.println(result.getNow("Bye"));
+		sleep(1500);
+		LOGGER.info("second getNow at {}",System.currentTimeMillis()-time);
+		System.out.println(result.getNow("Bye"));
+		// Hey, HELLO Word
+
+		result.runAfterBothAsync(extraLongTask, () -> System.out.println("After both!"), executorService);
+
+		result.whenCompleteAsync((s, throwable) -> System.out.println("Complete: " + s), executorService);
+
+		executorService.shutdown();
+		LOGGER.info("shutdown");
+	}
+
+	// Eredeti implementáció(nekem ezzel hibát dobott):
+//	/** * * @param sleeptime sleep time in milliseconds */
+//	private static void sleep(int sleeptime) {...}
+//	
+	// Saját impementáció(Szerintem ennek kéne ott lenni)
+	/**
+	 * * * @param sleeptime sleep time in milliseconds
+	 * 
+	 * @throws InterruptedException
+	 */
+	private static void sleep(int sleeptime) {
+		try {
+			Thread.sleep(sleeptime);
+			LOGGER.info("waiting  {}",sleeptime);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	
+}</programlisting>
+		<para>Kimenet Logger nélkül:</para>
+		<programlisting>Bye
+Hey, HELLO World
+Complete: Hey, HELLO World</programlisting>
+		<para>Kimenet
+			Loggerrel:<programlisting>[main] INFO backToTheFuture.FutureChainingExercise - Begining
+[pool-1-thread-1] INFO backToTheFuture.FutureChainingExercise - longTask is started at 11
+[pool-1-thread-2] INFO backToTheFuture.FutureChainingExercise -  shortTask is started at 12
+[main] INFO backToTheFuture.FutureChainingExercise - firrst getNow at 25
+Bye
+[pool-1-thread-2] INFO backToTheFuture.FutureChainingExercise - waiting  500
+[pool-1-thread-2] INFO backToTheFuture.FutureChainingExercise -  shortTask is ready at 518
+[pool-1-thread-2] INFO backToTheFuture.FutureChainingExercise - mediumTask is started at 519
+[pool-1-thread-1] INFO backToTheFuture.FutureChainingExercise - waiting  1000
+[pool-1-thread-1] INFO backToTheFuture.FutureChainingExercise - longTask is ready at 1018
+[pool-1-thread-1] INFO backToTheFuture.FutureChainingExercise - extraLongTask is started at 1018
+[pool-1-thread-2] INFO backToTheFuture.FutureChainingExercise - waiting  750
+[pool-1-thread-2] INFO backToTheFuture.FutureChainingExercise - mediumTask is ready at 1270
+[main] INFO backToTheFuture.FutureChainingExercise - waiting  1500
+[main] INFO backToTheFuture.FutureChainingExercise - second getNow at 1526
+Hey, HELLO World
+[main] INFO backToTheFuture.FutureChainingExercise - shutdown
+Complete: Hey, HELLO World
+[pool-1-thread-1] INFO backToTheFuture.FutureChainingExercise - waiting  1500
+[pool-1-thread-1] INFO backToTheFuture.FutureChainingExercise - extraLongTask is ready at 2518
+</programlisting></para>
+		<para>Az első Bye azért kerül ki iratásra mert abban az idő pilanatban még nincs kész egyik
+			task sem.</para>
+		<para>Hey, Hello World: 1500milliseconds várakozás után megint meg lesz híva a getNow ekkor
+			ra készen van a ShortTask a Madium Task és a longTask is de Short és a Medium ugyan azon
+			a szálon lett végre hajtva ezért a mediummot fogja meg kapni.</para>
+		<para>Complete: Hey, HELLO World: itt meg várja hogy be fejeződjön minden task és akkor fog
+			ki iratni</para>
+		<para>EPAM: AOP</para>
+		<programlisting>package com.epam.training;
+
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+
+/**
+ * Custom performance test marker annotation.
+ * Execution time for every method marked with this annotation will be collected and printed to stdout.
+ */
+@Retention(RetentionPolicy.RUNTIME)
+@Target(ElementType.METHOD)
+public @interface CustomTimer {
+}
+
+</programlisting>
+		<programlisting>package com.epam.training;
+
+import org.aspectj.lang.ProceedingJoinPoint;
+import org.aspectj.lang.annotation.Around;
+import org.aspectj.lang.annotation.Aspect;
+import org.springframework.stereotype.Service;
+import org.springframework.util.StopWatch;
+
+/**
+ * Custom aspect for collecting execution time for methods annotated with {@link CustomTimer}.
+ */
+@Aspect
+@Service
+public class CustomTimerAspect {
+
+    @Around("@annotation(com.epam.training.CustomTimer)")
+    public Object timeAnnotatedMethod(ProceedingJoinPoint pjp) throws Throwable {
+        // start stopwatch
+        StopWatch stopWatch = new StopWatch(pjp.getTarget().toString());
+        stopWatch.start();
+
+        Object retVal = pjp.proceed();
+
+        // stop stopwatch
+        stopWatch.stop();
+
+        System.out.println("Execution time for " + pjp.getTarget().toString() + ": " + stopWatch.getTotalTimeMillis() + " ms");
+
+        return retVal;
+    }
+
+}
+</programlisting>
+		<programlisting>package com.epam.training;
+
+import org.springframework.stereotype.Service;
+
+@Service
+public class ExampleService {
+
+    @CustomTimer
+    public void exampleMethodToTime() throws InterruptedException {
+        System.out.println("Testee start!");
+
+        Thread.sleep(1000);
+
+        System.out.println("Testee end!");
+    }
+
+}
+
+</programlisting>
+		<programlisting>package com.epam.training;
+
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.EnableAspectJAutoProxy;
+
+@SpringBootApplication
+@EnableAspectJAutoProxy
+public class MainApplication {
+
+    public static void main(String[] args) {
+        SpringApplication.run(MainApplication.class, args);
+    }
+
+    @Bean
+    public CommandLineRunner commandLineRunner(ApplicationContext ctx) {
+        return args -> ctx.getBean(ExampleService.class).exampleMethodToTime();
+    }
+
+}
+
+</programlisting>
+		<para>kimenet:<programlisting>
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+ :: Spring Boot ::        (v2.3.3.RELEASE)
+
+2020-12-07 13:52:33.810  INFO 14656 --- [           main] com.epam.training.MainApplication        : Starting MainApplication on DESKTOP-72JQOBP with PID 14656 (C:\Users\HP\Documents\GitHub\epam-deik-prog2\week-9\aop-performance-test\target\classes started by HP in C:\Users\HP\Documents\GitHub\epam-deik-prog2\week-9\aop-performance-test)
+2020-12-07 13:52:33.818  INFO 14656 --- [           main] com.epam.training.MainApplication        : No active profile set, falling back to default profiles: default
+2020-12-07 13:52:35.900  INFO 14656 --- [           main] com.epam.training.MainApplication        : Started MainApplication in 3.251 seconds (JVM running for 4.775)
+Testee start!
+Testee end!
+Execution time for com.epam.training.ExampleService@460510aa: 32888 ms
+</programlisting></para>
+		<para>AspectJ:<programlisting>package proba1;
+
+public class Main {
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		Account account =new Account();
+		
+		account.withdraw(10);
+
+	}
+
+}
+</programlisting><programlisting>package proba1;
+
+public class Account {
+	int balance = 20;
+
+	public boolean withdraw(int amount) {
+		
+		try {
+			Thread.sleep(1000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		if (balance &lt; amount) {
+			return false;
+		}
+		//System.out.println("working");
+		balance = balance - amount;
+		return true;
+	}
+
+}
+</programlisting><programlisting>package proba1;
+
+public aspect AccountAspect {
+	 final int MIN_BALANCE = 10;
+
+	    pointcut callWithDraw(int amount, Account acc) : 
+	     call(boolean Account.withdraw(int)) &amp;&amp; args(amount) &amp;&amp; target(acc);
+
+	    
+
+	    boolean around(int amount, Account acc) : 
+	      callWithDraw(amount, acc) {
+	    	long time= System.currentTimeMillis();
+	       boolean ret=proceed(amount, acc);
+	       System.out.println(System.currentTimeMillis()-time);
+	        return ret;
+	    }
+
+	   
+}
+</programlisting></para>
 	</section>    
   
   <section>
