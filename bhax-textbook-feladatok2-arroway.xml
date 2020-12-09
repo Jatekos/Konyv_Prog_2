@@ -2271,7 +2271,7 @@ kivetelkezeles.ParentExeption
 			dobódik egy ChildExeption ami majd a megfelelő catch-ben el lesz kapva amiből dobódik
 			egy ParentExeption de az előtt még le fut a finally mivel a finally még akkor is lefut
 			ha nem várt kivétel jelentkezik valahol ez fontos a resourcing recovering-hez.</para>
-		<para>Ezután pedig a JVM elkapja ez ez előtt dobot ParentExeption-t</para>
+		<para>Ezután pedig a JVM elkapja az ez előtt dobot ParentExeption-t</para>
 		<para>Bemenet String</para>
 		<para>Kimenet:</para>
 		<programlisting>Try
@@ -2585,6 +2585,14 @@ public aspect AccountAspect {
 		<para><link
 				xlink:href="https://github.com/Jatekos/Konyv_Prog_2/tree/master/reactiv-ReactorCore"
 			/></para>
+	</section>
+	<section>
+		<title>XP</title>
+		<para>WebShop: 50xp</para>
+		<para>UnitTest: 30xp</para>
+		<para>XmlMapPloter: 10+5xp</para>
+		<para>Kata: 30xp</para>
+		<para>Össz.: 125xp</para>
 	</section>    
   
   <section>
