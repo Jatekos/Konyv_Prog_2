@@ -11,43 +11,33 @@ public class CodeCracker {
 			return message;
 
 		String[] keySplited = key.split(" ");
-		String coded = "";
 
-		for (int i = 0; i < message.length(); i++) {
-			int j = 0;
-			while ( (message.charAt(i) != ABC[j].charAt(0))) {
-				j++;
-				if(!(j < ABC.length)) {
-					break;
-				}
-				
-			}
-			if ((j < keySplited.length)) {
-				coded += keySplited[j];
-			} else {
-				coded += message.toCharArray()[i];
-			}
-		}
-
-		// if(keySplited.length<)
-
-		return coded;
+		return coding(ABC, keySplited, message);
 	}
-	
-	public String coder( String[] key, String abc, String message) {
+
+	public String coder(String[] key, String abc, String message) {
 		// TODO Auto-generated method stub
-		String[]  ABC = key ;
-		String[]  keySplited=abc.split(" ") ;
+		 if(key == null)
+			return message;
+		
+		String[] ABC = key;
+		String[] keySplited = abc.split(" ");
+
+		return coding(ABC, keySplited, message);
+	}
+
+	private String coding(String[] ABC, String[] keySplited, String message) {
+		// TODO Auto-generated method stub
 		String coded = "";
 
 		for (int i = 0; i < message.length(); i++) {
 			int j = 0;
-			while ( (message.charAt(i) != ABC[j].charAt(0))) {
+			while ((message.charAt(i) != ABC[j].charAt(0))) {
 				j++;
-				if(!(j < ABC.length)) {
+				if (!(j < ABC.length)) {
 					break;
 				}
-				
+
 			}
 			if ((j < keySplited.length)) {
 				coded += keySplited[j];
@@ -55,9 +45,6 @@ public class CodeCracker {
 				coded += message.toCharArray()[i];
 			}
 		}
-
-		// if(keySplited.length<)
-
 		return coded;
 	}
 
