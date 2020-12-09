@@ -1915,9 +1915,12 @@ public class Printer {
 	}
 
 }
-<inlinemediaobject>
-    <imageobject><imagedata fileref="emoji.png"/></imageobject>
-</inlinemediaobject></programlisting>
+</programlisting>
+		<para><inlinemediaobject>
+				<imageobject>
+					<imagedata fileref="emoji.png"/>
+				</imageobject>
+			</inlinemediaobject></para>
 		<para>EPAM:</para>
 		<para>Titkos üzenet, száll a gépben!</para>
 		<programlisting>package hu.unideb.prog2.caesar;
